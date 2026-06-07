@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>伴夢伴醒 客戶管理</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+  :root {
+    --bg:#1a1b2e; --bg2:#20213a; --bg3:#272848;
+    --gold:#c8a84b; --gold2:rgba(200,168,75,0.15);
+    --white:rgba(255,255,255,0.88); --dim:rgba(255,255,255,0.45);
+    --red:#e07070; --green:#70c090; --yellow:#e0c070;
+    --border:rgba(200,168,75,0.18);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background:var(--bg); color:var(--white); font-family:'Noto Sans TC',sans-serif; min-height:100vh; padding:16px; max-width:600px; margin:0 auto; }
+
+  .loading { position:fixed; top:0;left:0;right:0;bottom:0; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:999; gap:16px; }
+  .loading-text { color:var(--gold); font-family:'Noto Serif TC',serif; font-size:18px; letter-spacing:4px; }
+  .loading-sub { color:var(--dim); font-size:13px; letter-spacing:2px; }
+  .spinner { width:32px; height:32px; border:2px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+  .brand { font-family:'Noto Serif TC',serif; font-size:18px; color:var(--gold); letter-spacing:3px; }
+  .brand small { display:block; font-size:10px; color:var(--dim); letter-spacing:2px; margin-top:2px; font-family:'Noto Sans TC',sans-serif; }
+  .add-btn { background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; }
+
+  .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:20px; }
+  .stat { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; }
+  .stat-num { font-size:26px; font-weight:500; color:var(--gold); font-family:'Noto Serif TC',serif; }
+  .stat-label { font-size:11px; color:var(--dim); margin-top:3px; letter-spacing:1px; }
+
+  .alert-item { background:rgba(224,112,112,0.08); border:1px solid rgba(224,112,112,0.25); border-radius:10px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:10px; font-size:13px; }
+  .alert-dot { width:8px; height:8px; border-radius:50%; background:var(--red); flex-shrink:0; margin-top:4px; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .tab-bar { display:flex; gap:6px; margin-bottom:16px; overflow-x:auto; padding-bottom:4px; }
+  .tab-bar::-webkit-scrollbar { display:none; }
+  .tab { padding:6px 14px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; white-space:nowrap; flex-shrink:0; }
+  .tab.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
+
+  .section-title { font-size:12px; color:var(--gold); letter-spacing:3px; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .clients { display:flex; flex-direction:column; gap:10px; }
+  .client-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; transition:border-color 0.2s; }
+  .client-card.urgent { border-left:3px solid var(--red); }
+  .client-card.warning { border-left:3px solid var(--yellow); }
+  .client-card.ok { border-left:3px solid var(--green); }
+  .client-card.expired { border-left:3px solid rgba(255,255,255,0.2); opacity:0.55; }
+
+  .card-top { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .avatar { width:38px; height:38px; border-radius:50%; background:var(--gold2); border:1px solid var(--gold); display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:15px; font-family:'Noto Serif TC',serif; flex-shrink:0; }
+  .client-name { font-size:15px; color:var(--white); flex:1; }
+  .plan-badge { padding:3px 10px; border-radius:20px; font-size:11px; letter-spacing:1px; }
+  .plan-single { background:rgba(112,192,144,0.15); color:var(--green); border:1px solid rgba(112,192,144,0.3); }
+  .plan-weekly { background:var(--gold2); color:var(--gold); border:1px solid rgba(200,168,75,0.3); }
+
+  .card-times { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
+  .time-box { background:var(--bg3); border-radius:8px; padding:8px 10px; }
+  .time-label { font-size:10px; color:var(--dim); letter-spacing:1px; margin-bottom:3px; }
+  .time-val { font-size:12px; color:var(--white); }
+
+  .countdown { background:var(--bg3); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .countdown-label { font-size:11px; color:var(--dim); letter-spacing:1px; }
+  .countdown-val { font-size:13px; font-weight:500; }
+  .countdown-val.urgent { color:var(--red); }
+  .countdown-val.warning { color:var(--yellow); }
+  .countdown-val.ok { color:var(--green); }
+  .countdown-val.expired { color:var(--dim); }
+
+  .card-note { font-size:12px; color:var(--dim); font-style:italic; margin-bottom:8px; padding:6px 10px; background:var(--bg3); border-radius:6px; }
+  .card-address { font-size:11px; color:var(--dim); margin-bottom:8px; }
+
+  .card-actions { display:flex; gap:8px; }
+  .card-btn { flex:1; padding:8px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--dim); cursor:pointer; font-size:12px; font-family:'Noto Sans TC',sans-serif; text-align:center; transition:all 0.2s; }
+  .card-btn.edit:active { border-color:var(--gold); color:var(--gold); }
+  .card-btn.renew { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
+  .card-btn.delete:active { border-color:var(--red); color:var(--red); }
+
+  .modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.8); z-index:100; justify-content:center; align-items:flex-end; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px 20px 0 0; padding:24px 20px 36px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; }
+  .modal h3 { font-family:'Noto Serif TC',serif; color:var(--gold); font-size:16px; letter-spacing:2px; margin-bottom:20px; text-align:center; }
+  .form-group { margin-bottom:14px; }
+  .form-group label { display:block; font-size:12px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; }
+  .form-group input, .form-group select, .form-group textarea { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:12px; color:var(--white); font-size:14px; font-family:'Noto Sans TC',sans-serif; outline:none; }
+  .form-group input:focus, .form-group select:focus { border-color:var(--gold); }
+  .form-group select option { background:var(--bg2); }
+  .modal-btns { display:flex; gap:10px; margin-top:20px; }
+  .btn-primary { flex:1; background:var(--gold); color:var(--bg); border:none; border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-weight:500; font-family:'Noto Sans TC',sans-serif; }
+  .btn-cancel { flex:1; background:transparent; color:var(--dim); border:1px solid var(--border); border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-family:'Noto Sans TC',sans-serif; }
+
+  .empty { text-align:center; color:var(--dim); font-size:13px; padding:40px; letter-spacing:1px; }
+  .drag-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 20px; }
+
+  .sync-indicator { font-size:11px; color:var(--dim); text-align:center; padding:8px; letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">伴夢伴醒</div>
+  <div class="loading-sub">連線中...</div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="header">
+    <div class="brand">伴夢伴醒<small>CLIENT MANAGER</small></div>
+    <button class="add-btn" onclick="openModal()">+ 新增</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="stat-active">0</div><div class="stat-label">進行中</div></div>
+    <div class="stat"><div class="stat-num" id="stat-expiring">0</div><div class="stat-label">即將到期</div></div>
+    <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">總用戶</div></div>
+    <div class="stat"><div class="stat-num" id="stat-revenue">$0</div><div class="stat-label">本月收入</div></div>
+  </div>
+
+  <div id="alerts-section"></div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="filterClients('all',this)">全部</button>
+    <button class="tab" onclick="filterClients('active',this)">進行中</button>
+    <button class="tab" onclick="filterClients('weekly',this)">深度陪伴</button>
+    <button class="tab" onclick="filterClients('single',this)">單次傾訴</button>
+    <button class="tab" onclick="filterClients('expired',this)">已到期</button>
+  </div>
+
+  <div class="section-title">用戶列表</div>
+  <div class="clients" id="clients-list"></div>
+  <div class="sync-indicator" id="sync-status">即時同步中</div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="drag-handle"></div>
+    <h3 id="modal-title">新增用戶</h3>
+    <div class="form-group">
+      <label>用戶暱稱</label>
+      <input type="text" id="f-name" placeholder="例：小葉">
+    </div>
+    <div class="form-group">
+      <label>方案</label>
+      <select id="f-plan">
+        <option value="weekly">深度陪伴 $799／週（168小時）</option>
+        <option value="single">單次傾訴 $199（24小時）</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>付款時間</label>
+      <input type="datetime-local" id="f-datetime">
+    </div>
+    <div class="form-group">
+      <label>備注（個人狀況）</label>
+      <textarea id="f-note" rows="2" placeholder="例：最近失戀，需要多一點陪伴"></textarea>
+    </div>
+    <div class="form-group">
+      <label>收件地址（寄發票用）</label>
+      <input type="text" id="f-address" placeholder="選填">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-primary" onclick="saveClient()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDvokbEafyLb7s5KihFJ1PSvy4assuzeb0",
+  authDomain: "monawake-c5c69.firebaseapp.com",
+  projectId: "monawake-c5c69",
+  storageBucket: "monawake-c5c69.firebasestorage.app",
+  messagingSenderId: "159548017770",
+  appId: "1:159548017770:web:eeb75db8f1043295824e13",
+  measurementId: "G-BHH3C2C2N1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const clientsRef = collection(db, 'clients');
+
+let clients = [];
+let editId = null;
+let currentFilter = 'all';
+let countdownTimer = null;
+
+// 即時監聽資料庫
+const q = query(clientsRef, orderBy('createdAt', 'desc'));
+onSnapshot(q, (snapshot) => {
+  clients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('sync-status').textContent = '已同步 ' + new Date().toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'});
+  render();
+}, (error) => {
+  document.getElementById('loading').innerHTML = '<div class="loading-text" style="color:#e07070">連線失敗</div><div class="loading-sub">請重新整理頁面</div>';
+});
+
+function getHoursLeft(datetimeStr, plan) {
+  const start = new Date(datetimeStr);
+  const hours = plan === 'weekly' ? 168 : 24;
+  const expiry = new Date(start.getTime() + hours * 60 * 60 * 1000);
+  return (expiry - new Date()) / (1000 * 60 * 60);
+}
+
+function getExpiry(datetimeStr, plan) {
+  const start = new Date(datetimeStr);
+  const hours = plan === 'weekly' ? 168 : 24;
+  return new Date(start.getTime() + hours * 60 * 60 * 1000);
+}
+
+function formatDatetime(dt) {
+  const d = new Date(dt);
+  return d.toLocaleDateString('zh-TW') + ' ' + d.toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'});
+}
+
+function formatCountdown(hoursLeft) {
+  if (hoursLeft <= 0) return '已到期';
+  const totalMins = Math.floor(hoursLeft * 60);
+  const days = Math.floor(totalMins / 1440);
+  const hours = Math.floor((totalMins % 1440) / 60);
+  const mins = totalMins % 60;
+  if (days > 0) return `${days}天 ${hours}小時 ${mins}分`;
+  if (hours > 0) return `${hours}小時 ${mins}分`;
+  return `${mins}分鐘`;
+}
+
+function getUrgency(hoursLeft) {
+  if (hoursLeft <= 0) return 'expired';
+  if (hoursLeft <= 6) return 'urgent';
+  if (hoursLeft <= 24) return 'warning';
+  return 'ok';
+}
+
+function render() {
+  let filtered = clients;
+  if (currentFilter === 'weekly') filtered = clients.filter(c => c.plan === 'weekly');
+  else if (currentFilter === 'single') filtered = clients.filter(c => c.plan === 'single');
+  else if (currentFilter === 'active') filtered = clients.filter(c => getHoursLeft(c.datetime, c.plan) > 0);
+  else if (currentFilter === 'expired') filtered = clients.filter(c => getHoursLeft(c.datetime, c.plan) <= 0);
+
+  const now = new Date();
+  const active = clients.filter(c => getHoursLeft(c.datetime, c.plan) > 0);
+  const expiring = clients.filter(c => { const h = getHoursLeft(c.datetime, c.plan); return h > 0 && h <= 24; });
+  const revenue = clients.filter(c => {
+    const d = new Date(c.datetime);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).reduce((s,c) => s + (c.plan === 'weekly' ? 799 : 199), 0);
+
+  document.getElementById('stat-total').textContent = clients.length;
+  document.getElementById('stat-active').textContent = active.length;
+  document.getElementById('stat-expiring').textContent = expiring.length;
+  document.getElementById('stat-revenue').textContent = '$' + revenue.toLocaleString();
+
+  const alertsEl = document.getElementById('alerts-section');
+  if (expiring.length > 0) {
+    alertsEl.innerHTML = '<div class="section-title">即將到期</div>' +
+      expiring.map(c => {
+        const h = getHoursLeft(c.datetime, c.plan);
+        return `<div class="alert-item"><div class="alert-dot"></div><div>${c.name}　剩 ${formatCountdown(h)}</div></div>`;
+      }).join('') + '<div style="height:12px"></div>';
+  } else { alertsEl.innerHTML = ''; }
+
+  const listEl = document.getElementById('clients-list');
+  if (filtered.length === 0) { listEl.innerHTML = '<div class="empty">目前還沒有用戶</div>'; return; }
+
+  listEl.innerHTML = filtered.map(c => {
+    const hoursLeft = getHoursLeft(c.datetime, c.plan);
+    const expiry = getExpiry(c.datetime, c.plan);
+    const urgency = getUrgency(hoursLeft);
+    const cdClass = hoursLeft <= 0 ? 'expired' : urgency;
+    return `<div class="client-card ${urgency}">
+      <div class="card-top">
+        <div class="avatar">${c.name.charAt(0)}</div>
+        <div class="client-name">${c.name}</div>
+        <div class="plan-badge ${c.plan==='weekly'?'plan-weekly':'plan-single'}">${c.plan==='weekly'?'深度陪伴':'單次傾訴'}</div>
+      </div>
+      <div class="card-times">
+        <div class="time-box"><div class="time-label">付款時間</div><div class="time-val">${formatDatetime(c.datetime)}</div></div>
+        <div class="time-box"><div class="time-label">到期時間</div><div class="time-val">${formatDatetime(expiry)}</div></div>
+      </div>
+      <div class="countdown">
+        <div class="countdown-label">剩餘時間</div>
+        <div class="countdown-val ${cdClass}" data-id="${c.id}">${formatCountdown(hoursLeft)}</div>
+      </div>
+      ${c.note ? `<div class="card-note">${c.note}</div>` : ''}
+      ${c.address ? `<div class="card-address">寄件：${c.address}</div>` : ''}
+      <div class="card-actions">
+        <button class="card-btn edit" onclick="window.openEdit('${c.id}')">編輯</button>
+        <button class="card-btn renew" onclick="window.renew('${c.id}')">續訂</button>
+        <button class="card-btn delete" onclick="window.deleteClient('${c.id}')">刪除</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  startCountdown();
+}
+
+function startCountdown() {
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdownTimer = setInterval(() => {
+    document.querySelectorAll('.countdown-val[data-id]').forEach(el => {
+      const id = el.dataset.id;
+      const c = clients.find(x => x.id === id);
+      if (!c) return;
+      const h = getHoursLeft(c.datetime, c.plan);
+      el.textContent = formatCountdown(h);
+      el.className = 'countdown-val ' + (h <= 0 ? 'expired' : getUrgency(h));
+    });
+  }, 60000);
+}
+
+window.openModal = function() {
+  editId = null;
+  document.getElementById('modal-title').textContent = '新增用戶';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-plan').value = 'weekly';
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('f-datetime').value = now.toISOString().slice(0,16);
+  document.getElementById('f-note').value = '';
+  document.getElementById('f-address').value = '';
+  document.getElementById('modal').classList.add('show');
+}
+
+window.openEdit = function(id) {
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  editId = id;
+  document.getElementById('modal-title').textContent = '編輯用戶';
+  document.getElementById('f-name').value = c.name;
+  document.getElementById('f-plan').value = c.plan;
+  document.getElementById('f-datetime').value = c.datetime;
+  document.getElementById('f-note').value = c.note || '';
+  document.getElementById('f-address').value = c.address || '';
+  document.getElementById('modal').classList.add('show');
+}
+
+window.closeModal = function() { document.getElementById('modal').classList.remove('show'); }
+
+window.saveClient = async function() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('請輸入用戶暱稱'); return; }
+  const data = {
+    name,
+    plan: document.getElementById('f-plan').value,
+    datetime: document.getElementById('f-datetime').value,
+    note: document.getElementById('f-note').value.trim(),
+    address: document.getElementById('f-address').value.trim(),
+    createdAt: serverTimestamp(),
+  };
+  if (editId) {
+    await updateDoc(doc(db, 'clients', editId), data);
+  } else {
+    await addDoc(clientsRef, data);
+  }
+  window.closeModal();
+}
+
+window.renew = async function(id) {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  await updateDoc(doc(db, 'clients', id), { datetime: now.toISOString().slice(0,16) });
+}
+
+window.deleteClient = async function(id) {
+  if (!confirm('確定要刪除嗎？')) return;
+  await deleteDoc(doc(db, 'clients', id));
+}
+
+window.filterClients = function(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) window.closeModal(); });
+</script>
+</body>
+</html>
