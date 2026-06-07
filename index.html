@@ -15,87 +15,48 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { background:var(--bg); color:var(--white); font-family:'Noto Sans TC',sans-serif; min-height:100vh; max-width:600px; margin:0 auto; }
-
-  /* 頂部導航 */
-  .top-nav {
-    position:sticky; top:0; z-index:50;
-    background:var(--bg);
-    border-bottom:1px solid var(--border);
-    padding:12px 16px;
-    display:flex; align-items:center; gap:12px;
-  }
-
-  .nav-brand {
-    font-family:'Noto Serif TC',serif;
-    font-size:15px; color:var(--gold); letter-spacing:3px; flex:1;
-  }
-
-  .nav-tabs {
-    display:flex; gap:6px;
-  }
-
-  .nav-tab {
-    padding:7px 16px; border-radius:20px; font-size:12px;
-    cursor:pointer; border:1px solid var(--border);
-    color:var(--dim); background:transparent;
-    font-family:'Noto Sans TC',sans-serif; letter-spacing:1px;
-    transition:all 0.2s; white-space:nowrap;
-  }
-
-  .nav-tab.active {
-    background:var(--gold2); border-color:var(--gold); color:var(--gold);
-  }
-
-  /* 分頁內容 */
+  .top-nav { position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border); padding:12px 16px; display:flex; align-items:center; gap:10px; }
+  .nav-brand { font-family:'Noto Serif TC',serif; font-size:15px; color:var(--gold); letter-spacing:3px; flex:1; }
+  .nav-tabs { display:flex; gap:6px; }
+  .nav-tab { padding:7px 14px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; }
+  .nav-tab.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
   .page { display:none; padding:16px; }
   .page.active { display:block; }
-
-  /* ══════════════════════ CRM 樣式 ══════════════════════ */
   .loading { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; gap:16px; }
   .loading-text { color:var(--gold); font-family:'Noto Serif TC',serif; font-size:16px; letter-spacing:4px; }
-  .loading-sub { color:var(--dim); font-size:13px; letter-spacing:2px; }
   .spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; }
   @keyframes spin { to{transform:rotate(360deg)} }
-
   .crm-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
   .add-btn { background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; }
-
   .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px; }
   .stat { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; }
   .stat-num { font-size:24px; font-weight:500; color:var(--gold); font-family:'Noto Serif TC',serif; }
   .stat-label { font-size:11px; color:var(--dim); margin-top:3px; letter-spacing:1px; }
-
   .alert-item { background:rgba(224,112,112,0.08); border:1px solid rgba(224,112,112,0.25); border-radius:10px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:10px; font-size:13px; }
   .alert-dot { width:8px; height:8px; border-radius:50%; background:var(--red); flex-shrink:0; margin-top:4px; animation:pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
   .filter-bar { display:flex; gap:6px; margin-bottom:16px; overflow-x:auto; padding-bottom:4px; }
   .filter-bar::-webkit-scrollbar { display:none; }
   .filter-tab { padding:6px 14px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; white-space:nowrap; flex-shrink:0; transition:all 0.2s; }
   .filter-tab.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
-
   .section-title { font-size:12px; color:var(--gold); letter-spacing:3px; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
   .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
-
   .clients { display:flex; flex-direction:column; gap:10px; }
   .client-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; }
   .client-card.urgent { border-left:3px solid var(--red); }
   .client-card.warning { border-left:3px solid var(--yellow); }
   .client-card.ok { border-left:3px solid var(--green); }
   .client-card.expired { border-left:3px solid rgba(255,255,255,0.2); opacity:0.55; }
-
   .card-top { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
   .avatar { width:36px; height:36px; border-radius:50%; background:var(--gold2); border:1px solid var(--gold); display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:14px; font-family:'Noto Serif TC',serif; flex-shrink:0; }
   .client-name { font-size:15px; color:var(--white); flex:1; }
   .plan-badge { padding:3px 10px; border-radius:20px; font-size:11px; letter-spacing:1px; }
   .plan-single { background:rgba(112,192,144,0.15); color:var(--green); border:1px solid rgba(112,192,144,0.3); }
   .plan-weekly { background:var(--gold2); color:var(--gold); border:1px solid rgba(200,168,75,0.3); }
-
   .card-times { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
   .time-box { background:var(--bg3); border-radius:8px; padding:8px 10px; }
   .time-label { font-size:10px; color:var(--dim); letter-spacing:1px; margin-bottom:3px; }
   .time-val { font-size:12px; color:var(--white); }
-
   .countdown { background:var(--bg3); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
   .countdown-label { font-size:11px; color:var(--dim); letter-spacing:1px; }
   .countdown-val { font-size:13px; font-weight:500; }
@@ -103,76 +64,62 @@
   .countdown-val.warning { color:var(--yellow); }
   .countdown-val.ok { color:var(--green); }
   .countdown-val.expired { color:var(--dim); }
-
   .card-note { font-size:12px; color:var(--dim); font-style:italic; margin-bottom:8px; padding:6px 10px; background:var(--bg3); border-radius:6px; }
   .card-address { font-size:11px; color:var(--dim); margin-bottom:8px; }
-
   .card-actions { display:flex; gap:8px; }
   .card-btn { flex:1; padding:8px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--dim); cursor:pointer; font-size:12px; font-family:'Noto Sans TC',sans-serif; text-align:center; transition:all 0.2s; }
   .card-btn.renew { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
   .card-btn.delete:active { border-color:var(--red); color:var(--red); }
-
   .sync-indicator { font-size:11px; color:var(--dim); text-align:center; padding:8px; letter-spacing:1px; }
-
-  /* ══════════════════════ 訊息快抄樣式 ══════════════════════ */
-  .search-wrap { margin-bottom:16px; }
-  .search-input { width:100%; background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:12px 16px; color:var(--white); font-size:14px; font-family:'Noto Sans TC',sans-serif; outline:none; }
+  .msg-toolbar { display:flex; gap:8px; margin-bottom:16px; }
+  .search-input { flex:1; background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--white); font-size:14px; font-family:'Noto Sans TC',sans-serif; outline:none; }
   .search-input:focus { border-color:var(--gold); }
   .search-input::placeholder { color:var(--dim); }
-
+  .new-msg-btn { background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:10px 16px; border-radius:10px; cursor:pointer; font-size:13px; font-family:'Noto Sans TC',sans-serif; white-space:nowrap; }
   .msg-tab-bar { display:flex; gap:6px; margin-bottom:16px; overflow-x:auto; padding-bottom:4px; }
   .msg-tab-bar::-webkit-scrollbar { display:none; }
   .msg-tab { padding:6px 14px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; white-space:nowrap; flex-shrink:0; transition:all 0.2s; }
   .msg-tab.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
-
-  .messages { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+  .messages-list { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
   .msg-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; }
-  .msg-label { font-size:11px; color:var(--gold); letter-spacing:2px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
-  .copy-btn { background:var(--gold2); border:1px solid rgba(200,168,75,0.3); color:var(--gold); padding:4px 12px; border-radius:6px; font-size:11px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; flex-shrink:0; }
+  .msg-card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
+  .msg-label { font-size:12px; color:var(--gold); letter-spacing:1px; flex:1; }
+  .msg-cat-badge { font-size:10px; color:var(--dim); background:var(--bg3); padding:2px 8px; border-radius:10px; white-space:nowrap; flex-shrink:0; }
+  .msg-actions { display:flex; gap:6px; margin-bottom:8px; }
+  .copy-btn { background:var(--gold2); border:1px solid rgba(200,168,75,0.3); color:var(--gold); padding:5px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:all 0.2s; }
   .copy-btn.copied { background:rgba(112,192,144,0.2); border-color:rgba(112,192,144,0.4); color:var(--green); }
-  .msg-text { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.9; white-space:pre-wrap; word-break:break-word; }
-
-  /* Modal */
+  .edit-btn { background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--dim); padding:5px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; }
+  .del-btn { background:rgba(224,112,112,0.06); border:1px solid rgba(224,112,112,0.2); color:var(--red); padding:5px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; }
+  .msg-text { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.9; white-space:pre-wrap; word-break:break-word; }
+  .empty { text-align:center; color:var(--dim); font-size:13px; padding:40px; letter-spacing:1px; }
   .modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.8); z-index:200; justify-content:center; align-items:flex-end; }
   .modal-overlay.show { display:flex; }
-  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px 20px 0 0; padding:24px 20px 36px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; }
+  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px 20px 0 0; padding:24px 20px 36px; width:100%; max-width:600px; max-height:92vh; overflow-y:auto; }
+  .drag-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 20px; }
   .modal h3 { font-family:'Noto Serif TC',serif; color:var(--gold); font-size:16px; letter-spacing:2px; margin-bottom:20px; text-align:center; }
   .form-group { margin-bottom:14px; }
   .form-group label { display:block; font-size:12px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; }
   .form-group input, .form-group select, .form-group textarea { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:12px; color:var(--white); font-size:14px; font-family:'Noto Sans TC',sans-serif; outline:none; }
-  .form-group input:focus, .form-group select:focus { border-color:var(--gold); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--gold); }
   .form-group select option { background:var(--bg2); }
   .modal-btns { display:flex; gap:10px; margin-top:20px; }
   .btn-primary { flex:1; background:var(--gold); color:var(--bg); border:none; border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-weight:500; font-family:'Noto Sans TC',sans-serif; }
   .btn-cancel { flex:1; background:transparent; color:var(--dim); border:1px solid var(--border); border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-family:'Noto Sans TC',sans-serif; }
-  .drag-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 20px; }
-  .empty { text-align:center; color:var(--dim); font-size:13px; padding:40px; letter-spacing:1px; }
 </style>
 </head>
 <body>
-
-<!-- 頂部導航 -->
 <div class="top-nav">
   <div class="nav-brand">伴夢伴醒</div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchPage('crm', this)">客戶管理</button>
-    <button class="nav-tab" onclick="switchPage('messages', this)">訊息快抄</button>
+    <button class="nav-tab active" onclick="switchPage('crm',this)">客戶管理</button>
+    <button class="nav-tab" onclick="switchPage('messages',this)">訊息快抄</button>
   </div>
 </div>
 
-<!-- CRM 頁面 -->
 <div class="page active" id="page-crm">
-  <div id="loading-crm">
-    <div class="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">連線中</div>
-    </div>
-  </div>
+  <div id="loading-crm"><div class="loading"><div class="spinner"></div><div class="loading-text">連線中</div></div></div>
   <div id="app-crm" style="display:none">
-    <div class="crm-header">
-      <div style="font-size:13px;color:var(--dim);letter-spacing:1px;">用戶管理</div>
-      <button class="add-btn" onclick="openModal()">+ 新增</button>
-    </div>
+    <div class="crm-header"><div style="font-size:13px;color:var(--dim);letter-spacing:1px;">用戶管理</div><button class="add-btn" onclick="openClientModal()">+ 新增</button></div>
     <div class="stats">
       <div class="stat"><div class="stat-num" id="stat-active">0</div><div class="stat-label">進行中</div></div>
       <div class="stat"><div class="stat-num" id="stat-expiring">0</div><div class="stat-label">即將到期</div></div>
@@ -193,351 +140,143 @@
   </div>
 </div>
 
-<!-- 訊息快抄頁面 -->
 <div class="page" id="page-messages">
-  <div class="search-wrap">
-    <input class="search-input" type="text" id="search" placeholder="搜尋訊息..." oninput="searchMessages()">
+  <div class="msg-toolbar">
+    <input class="search-input" type="text" id="msg-search" placeholder="搜尋訊息..." oninput="renderMessages()">
+    <button class="new-msg-btn" onclick="openMsgModal()">+ 新增</button>
   </div>
   <div class="msg-tab-bar">
     <button class="msg-tab active" onclick="filterMsgCat('all',this)">全部</button>
     <button class="msg-tab" onclick="filterMsgCat('welcome',this)">付款完成</button>
     <button class="msg-tab" onclick="filterMsgCat('reject',this)">婉拒</button>
     <button class="msg-tab" onclick="filterMsgCat('end',this)">結束服務</button>
+    <button class="msg-tab" onclick="filterMsgCat('crisis',this)">危機關懷</button>
     <button class="msg-tab" onclick="filterMsgCat('common',this)">常用回應</button>
+    <button class="msg-tab" onclick="filterMsgCat('other',this)">其他</button>
   </div>
   <div id="messages-container"></div>
 </div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal">
+<div class="modal-overlay" id="client-modal">
   <div class="modal">
     <div class="drag-handle"></div>
-    <h3 id="modal-title">新增用戶</h3>
+    <h3 id="client-modal-title">新增用戶</h3>
     <div class="form-group"><label>用戶暱稱</label><input type="text" id="f-name" placeholder="例：小葉"></div>
     <div class="form-group"><label>方案</label>
-      <select id="f-plan">
-        <option value="weekly">深度陪伴 $799／週（168小時）</option>
-        <option value="single">單次傾訴 $199（24小時）</option>
-      </select>
+      <select id="f-plan"><option value="weekly">深度陪伴 $799／週（168小時）</option><option value="single">單次傾訴 $199（24小時）</option></select>
     </div>
     <div class="form-group"><label>付款時間</label><input type="datetime-local" id="f-datetime"></div>
-    <div class="form-group"><label>備注（個人狀況）</label><textarea id="f-note" rows="2" placeholder="例：最近失戀，需要多一點陪伴"></textarea></div>
+    <div class="form-group"><label>備注</label><textarea id="f-note" rows="2" placeholder="個人狀況備注"></textarea></div>
     <div class="form-group"><label>收件地址（寄發票用）</label><input type="text" id="f-address" placeholder="選填"></div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">取消</button>
-      <button class="btn-primary" onclick="saveClient()">儲存</button>
-    </div>
+    <div class="modal-btns"><button class="btn-cancel" onclick="closeClientModal()">取消</button><button class="btn-primary" onclick="saveClient()">儲存</button></div>
   </div>
 </div>
 
-<!-- Firebase CRM Script -->
+<div class="modal-overlay" id="msg-modal">
+  <div class="modal">
+    <div class="drag-handle"></div>
+    <h3 id="msg-modal-title">新增訊息</h3>
+    <div class="form-group"><label>訊息標題</label><input type="text" id="m-label" placeholder="例：付款完成 — 單次傾訴"></div>
+    <div class="form-group"><label>分類</label>
+      <select id="m-cat">
+        <option value="welcome">付款完成</option>
+        <option value="reject">婉拒</option>
+        <option value="end">結束服務</option>
+        <option value="crisis">危機關懷</option>
+        <option value="common">常用回應</option>
+        <option value="other">其他</option>
+      </select>
+    </div>
+    <div class="form-group"><label>訊息內容</label><textarea id="m-text" rows="8" placeholder="輸入訊息內容..."></textarea></div>
+    <div class="modal-btns"><button class="btn-cancel" onclick="closeMsgModal()">取消</button><button class="btn-primary" onclick="saveMsg()">儲存</button></div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+const firebaseConfig = { apiKey:"AIzaSyDvokbEafyLb7s5KihFJ1PSvy4assuzeb0", authDomain:"monawake-c5c69.firebaseapp.com", projectId:"monawake-c5c69", storageBucket:"monawake-c5c69.firebasestorage.app", messagingSenderId:"159548017770", appId:"1:159548017770:web:eeb75db8f1043295824e13" };
+const app=initializeApp(firebaseConfig), db=getFirestore(app);
+const clientsRef=collection(db,'clients'), msgsRef=collection(db,'messages');
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDvokbEafyLb7s5KihFJ1PSvy4assuzeb0",
-  authDomain: "monawake-c5c69.firebaseapp.com",
-  projectId: "monawake-c5c69",
-  storageBucket: "monawake-c5c69.firebasestorage.app",
-  messagingSenderId: "159548017770",
-  appId: "1:159548017770:web:eeb75db8f1043295824e13",
-};
+let clients=[],editClientId=null,currentClientFilter='all',countdownTimer=null;
+let msgs=[],editMsgId=null,currentMsgCat='all';
+const catNames={welcome:'付款完成',reject:'婉拒',end:'結束服務',crisis:'危機關懷',common:'常用回應',other:'其他'};
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const clientsRef = collection(db, 'clients');
-
-let clients = [];
-let editId = null;
-let currentFilter = 'all';
-let countdownTimer = null;
-
-const q = query(clientsRef, orderBy('createdAt', 'desc'));
-onSnapshot(q, (snapshot) => {
-  clients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  document.getElementById('loading-crm').style.display = 'none';
-  document.getElementById('app-crm').style.display = 'block';
-  document.getElementById('sync-status').textContent = '已同步 ' + new Date().toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'});
+onSnapshot(query(clientsRef,orderBy('createdAt','desc')),snap=>{
+  clients=snap.docs.map(d=>({id:d.id,...d.data()}));
+  document.getElementById('loading-crm').style.display='none';
+  document.getElementById('app-crm').style.display='block';
+  document.getElementById('sync-status').textContent='已同步 '+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
   renderCRM();
-}, () => {
-  document.getElementById('loading-crm').innerHTML = '<div class="loading"><div class="loading-text" style="color:#e07070">連線失敗</div><div class="loading-sub">請重新整理</div></div>';
+},()=>{document.getElementById('loading-crm').innerHTML='<div class="loading"><div class="loading-text" style="color:#e07070">連線失敗</div></div>';});
+
+onSnapshot(query(msgsRef,orderBy('createdAt','asc')),snap=>{
+  msgs=snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderMessages();
 });
 
-function getHoursLeft(dt, plan) {
-  const h = plan === 'weekly' ? 168 : 24;
-  return (new Date(dt).getTime() + h*3600000 - Date.now()) / 3600000;
-}
-function getExpiry(dt, plan) {
-  return new Date(new Date(dt).getTime() + (plan==='weekly'?168:24)*3600000);
-}
-function fmtDt(dt) {
-  const d = new Date(dt);
-  return d.toLocaleDateString('zh-TW') + ' ' + d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
-}
-function fmtCountdown(h) {
-  if (h<=0) return '已到期';
-  const m = Math.floor(h*60);
-  const d = Math.floor(m/1440), hr = Math.floor((m%1440)/60), mn = m%60;
-  if (d>0) return `${d}天 ${hr}小時 ${mn}分`;
-  if (hr>0) return `${hr}小時 ${mn}分`;
-  return `${mn}分鐘`;
-}
-function urgency(h) {
-  if (h<=0) return 'expired';
-  if (h<=6) return 'urgent';
-  if (h<=24) return 'warning';
-  return 'ok';
-}
+function getHL(dt,plan){return(new Date(dt).getTime()+(plan==='weekly'?168:24)*3600000-Date.now())/3600000;}
+function getExp(dt,plan){return new Date(new Date(dt).getTime()+(plan==='weekly'?168:24)*3600000);}
+function fDt(dt){const d=new Date(dt);return d.toLocaleDateString('zh-TW')+' '+d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});}
+function fCD(h){if(h<=0)return '已到期';const m=Math.floor(h*60),d=Math.floor(m/1440),hr=Math.floor((m%1440)/60),mn=m%60;if(d>0)return `${d}天 ${hr}小時 ${mn}分`;if(hr>0)return `${hr}小時 ${mn}分`;return `${mn}分鐘`;}
+function urg(h){if(h<=0)return 'expired';if(h<=6)return 'urgent';if(h<=24)return 'warning';return 'ok';}
 
-function renderCRM() {
-  let filtered = clients;
-  if (currentFilter==='weekly') filtered=clients.filter(c=>c.plan==='weekly');
-  else if (currentFilter==='single') filtered=clients.filter(c=>c.plan==='single');
-  else if (currentFilter==='active') filtered=clients.filter(c=>getHoursLeft(c.datetime,c.plan)>0);
-  else if (currentFilter==='expired') filtered=clients.filter(c=>getHoursLeft(c.datetime,c.plan)<=0);
-
-  const now = new Date();
-  const active = clients.filter(c=>getHoursLeft(c.datetime,c.plan)>0);
-  const expiring = clients.filter(c=>{const h=getHoursLeft(c.datetime,c.plan);return h>0&&h<=24;});
-  const revenue = clients.filter(c=>{const d=new Date(c.datetime);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).reduce((s,c)=>s+(c.plan==='weekly'?799:199),0);
-
+function renderCRM(){
+  let f=clients;
+  if(currentClientFilter==='weekly')f=clients.filter(c=>c.plan==='weekly');
+  else if(currentClientFilter==='single')f=clients.filter(c=>c.plan==='single');
+  else if(currentClientFilter==='active')f=clients.filter(c=>getHL(c.datetime,c.plan)>0);
+  else if(currentClientFilter==='expired')f=clients.filter(c=>getHL(c.datetime,c.plan)<=0);
+  const now=new Date();
+  const active=clients.filter(c=>getHL(c.datetime,c.plan)>0);
+  const expiring=clients.filter(c=>{const h=getHL(c.datetime,c.plan);return h>0&&h<=24;});
+  const rev=clients.filter(c=>{const d=new Date(c.datetime);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).reduce((s,c)=>s+(c.plan==='weekly'?799:199),0);
   document.getElementById('stat-total').textContent=clients.length;
   document.getElementById('stat-active').textContent=active.length;
   document.getElementById('stat-expiring').textContent=expiring.length;
-  document.getElementById('stat-revenue').textContent='$'+revenue.toLocaleString();
-
-  const alertsEl=document.getElementById('alerts-section');
-  alertsEl.innerHTML=expiring.length>0?'<div class="section-title">即將到期</div>'+expiring.map(c=>`<div class="alert-item"><div class="alert-dot"></div><div>${c.name}　剩 ${fmtCountdown(getHoursLeft(c.datetime,c.plan))}</div></div>`).join('')+'<div style="height:12px"></div>':'';
-
-  const listEl=document.getElementById('clients-list');
-  if(!filtered.length){listEl.innerHTML='<div class="empty">目前還沒有用戶</div>';return;}
-  listEl.innerHTML=filtered.map(c=>{
-    const h=getHoursLeft(c.datetime,c.plan);
-    const u=urgency(h);
-    return `<div class="client-card ${u}">
-      <div class="card-top">
-        <div class="avatar">${c.name.charAt(0)}</div>
-        <div class="client-name">${c.name}</div>
-        <div class="plan-badge ${c.plan==='weekly'?'plan-weekly':'plan-single'}">${c.plan==='weekly'?'深度陪伴':'單次傾訴'}</div>
-      </div>
-      <div class="card-times">
-        <div class="time-box"><div class="time-label">付款時間</div><div class="time-val">${fmtDt(c.datetime)}</div></div>
-        <div class="time-box"><div class="time-label">到期時間</div><div class="time-val">${fmtDt(getExpiry(c.datetime,c.plan))}</div></div>
-      </div>
-      <div class="countdown"><div class="countdown-label">剩餘時間</div><div class="countdown-val ${h<=0?'expired':u}" data-id="${c.id}">${fmtCountdown(h)}</div></div>
-      ${c.note?`<div class="card-note">${c.note}</div>`:''}
-      ${c.address?`<div class="card-address">寄件：${c.address}</div>`:''}
-      <div class="card-actions">
-        <button class="card-btn" onclick="window.openEdit('${c.id}')">編輯</button>
-        <button class="card-btn renew" onclick="window.renew('${c.id}')">續訂</button>
-        <button class="card-btn delete" onclick="window.deleteClient('${c.id}')">刪除</button>
-      </div>
-    </div>`;
-  }).join('');
-
-  if(countdownTimer) clearInterval(countdownTimer);
-  countdownTimer=setInterval(()=>{
-    document.querySelectorAll('.countdown-val[data-id]').forEach(el=>{
-      const c=clients.find(x=>x.id===el.dataset.id);
-      if(!c) return;
-      const h=getHoursLeft(c.datetime,c.plan);
-      el.textContent=fmtCountdown(h);
-      el.className='countdown-val '+(h<=0?'expired':urgency(h));
-    });
-  },60000);
+  document.getElementById('stat-revenue').textContent='$'+rev.toLocaleString();
+  const ae=document.getElementById('alerts-section');
+  ae.innerHTML=expiring.length?'<div class="section-title">即將到期</div>'+expiring.map(c=>`<div class="alert-item"><div class="alert-dot"></div><div>${c.name}　剩 ${fCD(getHL(c.datetime,c.plan))}</div></div>`).join('')+'<div style="height:12px"></div>':'';
+  const le=document.getElementById('clients-list');
+  if(!f.length){le.innerHTML='<div class="empty">目前還沒有用戶</div>';return;}
+  le.innerHTML=f.map(c=>{const h=getHL(c.datetime,c.plan),u=urg(h);return `<div class="client-card ${u}"><div class="card-top"><div class="avatar">${c.name.charAt(0)}</div><div class="client-name">${c.name}</div><div class="plan-badge ${c.plan==='weekly'?'plan-weekly':'plan-single'}">${c.plan==='weekly'?'深度陪伴':'單次傾訴'}</div></div><div class="card-times"><div class="time-box"><div class="time-label">付款時間</div><div class="time-val">${fDt(c.datetime)}</div></div><div class="time-box"><div class="time-label">到期時間</div><div class="time-val">${fDt(getExp(c.datetime,c.plan))}</div></div></div><div class="countdown"><div class="countdown-label">剩餘時間</div><div class="countdown-val ${h<=0?'expired':u}" data-id="${c.id}">${fCD(h)}</div></div>${c.note?`<div class="card-note">${c.note}</div>`:''}${c.address?`<div class="card-address">寄件：${c.address}</div>`:''}<div class="card-actions"><button class="card-btn" onclick="window.openEditClient('${c.id}')">編輯</button><button class="card-btn renew" onclick="window.renewClient('${c.id}')">續訂</button><button class="card-btn delete" onclick="window.delClient('${c.id}')">刪除</button></div></div>`;}).join('');
+  if(countdownTimer)clearInterval(countdownTimer);
+  countdownTimer=setInterval(()=>{document.querySelectorAll('.countdown-val[data-id]').forEach(el=>{const c=clients.find(x=>x.id===el.dataset.id);if(!c)return;const h=getHL(c.datetime,c.plan);el.textContent=fCD(h);el.className='countdown-val '+(h<=0?'expired':urg(h));});},60000);
 }
 
-window.openModal=function(){
-  editId=null;
-  document.getElementById('modal-title').textContent='新增用戶';
-  document.getElementById('f-name').value='';
-  document.getElementById('f-plan').value='weekly';
-  const now=new Date(); now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
-  document.getElementById('f-datetime').value=now.toISOString().slice(0,16);
-  document.getElementById('f-note').value='';
-  document.getElementById('f-address').value='';
-  document.getElementById('modal').classList.add('show');
-}
-window.openEdit=function(id){
-  const c=clients.find(x=>x.id===id); if(!c) return;
-  editId=id;
-  document.getElementById('modal-title').textContent='編輯用戶';
-  document.getElementById('f-name').value=c.name;
-  document.getElementById('f-plan').value=c.plan;
-  document.getElementById('f-datetime').value=c.datetime;
-  document.getElementById('f-note').value=c.note||'';
-  document.getElementById('f-address').value=c.address||'';
-  document.getElementById('modal').classList.add('show');
-}
-window.closeModal=function(){document.getElementById('modal').classList.remove('show');}
-window.saveClient=async function(){
-  const name=document.getElementById('f-name').value.trim();
-  if(!name){alert('請輸入用戶暱稱');return;}
-  const data={name,plan:document.getElementById('f-plan').value,datetime:document.getElementById('f-datetime').value,note:document.getElementById('f-note').value.trim(),address:document.getElementById('f-address').value.trim(),createdAt:serverTimestamp()};
-  if(editId){await updateDoc(doc(db,'clients',editId),data);}
-  else{await addDoc(clientsRef,data);}
-  window.closeModal();
-}
-window.renew=async function(id){
-  const now=new Date(); now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
-  await updateDoc(doc(db,'clients',id),{datetime:now.toISOString().slice(0,16)});
-}
-window.deleteClient=async function(id){
-  if(!confirm('確定要刪除嗎？')) return;
-  await deleteDoc(doc(db,'clients',id));
-}
-window.filterClients=function(filter,btn){
-  currentFilter=filter;
-  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  renderCRM();
-}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)window.closeModal();});
-</script>
+window.openClientModal=function(){editClientId=null;document.getElementById('client-modal-title').textContent='新增用戶';document.getElementById('f-name').value='';document.getElementById('f-plan').value='weekly';const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());document.getElementById('f-datetime').value=now.toISOString().slice(0,16);document.getElementById('f-note').value='';document.getElementById('f-address').value='';document.getElementById('client-modal').classList.add('show');}
+window.openEditClient=function(id){const c=clients.find(x=>x.id===id);if(!c)return;editClientId=id;document.getElementById('client-modal-title').textContent='編輯用戶';document.getElementById('f-name').value=c.name;document.getElementById('f-plan').value=c.plan;document.getElementById('f-datetime').value=c.datetime;document.getElementById('f-note').value=c.note||'';document.getElementById('f-address').value=c.address||'';document.getElementById('client-modal').classList.add('show');}
+window.closeClientModal=function(){document.getElementById('client-modal').classList.remove('show');}
+window.saveClient=async function(){const name=document.getElementById('f-name').value.trim();if(!name){alert('請輸入用戶暱稱');return;}const data={name,plan:document.getElementById('f-plan').value,datetime:document.getElementById('f-datetime').value,note:document.getElementById('f-note').value.trim(),address:document.getElementById('f-address').value.trim(),createdAt:serverTimestamp()};if(editClientId){await updateDoc(doc(db,'clients',editClientId),data);}else{await addDoc(clientsRef,data);}window.closeClientModal();}
+window.renewClient=async function(id){const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());await updateDoc(doc(db,'clients',id),{datetime:now.toISOString().slice(0,16)});}
+window.delClient=async function(id){if(!confirm('確定要刪除嗎？'))return;await deleteDoc(doc(db,'clients',id));}
+window.filterClients=function(f,btn){currentClientFilter=f;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderCRM();}
 
-<!-- 訊息快抄 Script -->
-<script>
-const messages = [
-  {id:1,cat:'welcome',label:'付款完成 — 單次傾訴',text:`收到了 🌙
-歡迎來到伴夢伴醒。
-從現在起的 24 小時內（服務時間 09:00–23:00）
-你可以跟我說你想說的事。
-不用整理好，不用說得完整，
-想到什麼就說什麼。
-
-服務結束後，我們會再詢問你的收件資料 🌿
-紙本發票將於服務結束後寄送給你。`},
-  {id:2,cat:'welcome',label:'付款完成 — 深度陪伴',text:`收到了 🌙
-歡迎來到伴夢伴醒。
-從今天起，這裡就是你說得出口的地方。
-
-服務時間 09:00–23:00
-你隨時可以來說話，我不一定秒回，
-但我一定會回你 🌿
-
-服務結束後，我們會再詢問你的收件資料 🌿
-紙本發票及手寫情緒小卡將於服務結束後寄送給你。`},
-  {id:3,cat:'reject',label:'婉拒 — 溫暖遺憾版（單次傾訴）',text:`謝謝你的信任，願意來到伴夢伴醒 🌙
-很想好好聽你說說話，但為了確保每一次的傾聽都能給你最完整的專注與品質，本日的真人陪伴名額已經悄悄額滿了。🌿
-
-雖然今天暫時無法用文字接住你，但我的心意一直都在。
-今晚，你可以先讓這裡陪你：
-
-🎵 點選下方選單【聽音樂】— 讓聲音先抱抱你。
-
-當名額再次釋放時，我會第一時間在官方帳號發送通知。
-希望下一次，能由我真人好好陪你，說完輕一點再走。🌸`},
-  {id:4,cat:'reject',label:'婉拒 — 限額限時版（深度陪伴）',text:`很高興遇見你 🌿 這裡是伴夢伴醒。
-為了守護每一位朋友的陪伴品質，我的真人陪伴方案一直都是「嚴格限量」的。因為活生生的人類體力有限，我想把最好的狀態留給你們。
-
-目前「本週」的真人陪伴名額已經全數額滿囉！🌙
-
-雖然這段時間沒辦法直接和你對話，但夢裡的位置一直為你留著：
-
-🎵 點擊【聽音樂】— 讓深夜的療癒旋律代替我，陪你入夢。
-
-再次謝謝你的喜歡。等下一波名額釋出時，系統會自動發送通知，到時候要記得手刀預約喔！`},
-  {id:5,cat:'end',label:'結束服務 — 深度陪伴到期',text:`我的深度陪伴服務到今天就正式畫下句點囉 🌸
-這七天裡，謝謝你願意對我敞開心房，分享那些生活裡的起起伏伏。看著你一步步走過來，真的辛苦了。
-
-雖然白天的文字對話暫時告一段落，但別忘了，只要點擊下方選單的【聽音樂】，深夜的療癒旋律依然會一直在夢裡陪著你。
-
-🌙 這是為你準備的最後一份實體心意：
-我們會寄出這次服務的紙本發票，以及一張根據你這週的心情、親手為你寫的情緒祝福小卡，希望能實體地陪伴你走更遠。🌿
-
-請在下方回覆你的收件資料：
-姓名（暱稱亦可）：
-地址（含郵遞區號）：
-電話：
-
-若不方便提供實體資料，直接回覆「捐贈」即可，我們會為你將這張發票捐給慈善機構，將這份溫暖延續出去。
-
-未來如果生活又累積了一些雜訊、或者想念這個懂你的朋友了，隨時點擊選單的【陪伴方案】就能再次開啟新的一週。
-
-祝你今天，也能輕一點地好好入夢。晚安 🌙`},
-  {id:6,cat:'common',label:'常用 — 我在，繼續說',text:`我在 🌙
-不用整理好再說，
-想到什麼就說什麼。`},
-  {id:7,cat:'common',label:'常用 — 說不上來也沒關係',text:`說不上來也沒關係 🌿
-就待著也行，不一定要說。`},
-  {id:8,cat:'common',label:'常用 — 我看到了',text:`我看到了 🌙
-你說的每一句話我都有在讀。`},
-  {id:9,cat:'common',label:'常用 — 引導付費',text:`你說的這些，我想好好陪你聊 🌙
-如果你願意，我們可以深一點談。
-有興趣了解看看嗎？`},
-  {id:10,cat:'common',label:'常用 — 離線提醒',text:`我現在暫時不在，但我看到你了 🌙
-我會在服務時間內好好回你。
-先讓音樂陪著你：點選單【聽音樂】🎵`},
-];
-
-let currentMsgCat='all';
-let currentSearch='';
-
-function renderMessages(){
+window.renderMessages=function(){
+  const search=document.getElementById('msg-search').value.trim();
+  let f=msgs.filter(m=>{const mc=currentMsgCat==='all'||m.cat===currentMsgCat;const ms=!search||m.label.includes(search)||m.text.includes(search);return mc&&ms;});
   const container=document.getElementById('messages-container');
-  const filtered=messages.filter(m=>{
-    const matchCat=currentMsgCat==='all'||m.cat===currentMsgCat;
-    const matchSearch=currentSearch===''||m.label.includes(currentSearch)||m.text.includes(currentSearch);
-    return matchCat&&matchSearch;
-  });
-  if(!filtered.length){container.innerHTML='<div class="empty">找不到相關訊息</div>';return;}
-  const cats={welcome:'付款完成',reject:'婉拒訊息',end:'結束服務',common:'常用回應'};
-  if(currentMsgCat!=='all'||currentSearch!==''){
-    container.innerHTML=`<div class="messages">${filtered.map(m=>renderMsgCard(m)).join('')}</div>`;
-  } else {
-    let html='';
-    const groups={};
-    filtered.forEach(m=>{if(!groups[m.cat])groups[m.cat]=[];groups[m.cat].push(m);});
-    Object.entries(groups).forEach(([cat,msgs])=>{
-      html+=`<div class="section-title">${cats[cat]||cat}</div><div class="messages">${msgs.map(m=>renderMsgCard(m)).join('')}</div>`;
-    });
-    container.innerHTML=html;
-  }
+  if(!f.length){container.innerHTML='<div class="empty">沒有訊息，點右上角新增</div>';return;}
+  if(currentMsgCat!=='all'||search){container.innerHTML=`<div class="messages-list">${f.map(m=>msgCard(m)).join('')}</div>`;return;}
+  let html='';const groups={};
+  f.forEach(m=>{if(!groups[m.cat])groups[m.cat]=[];groups[m.cat].push(m);});
+  Object.entries(groups).forEach(([cat,ms])=>{html+=`<div class="section-title">${catNames[cat]||cat}</div><div class="messages-list">${ms.map(m=>msgCard(m)).join('')}</div>`;});
+  container.innerHTML=html;
 }
 
-function renderMsgCard(m){
-  return `<div class="msg-card">
-    <div class="msg-label">
-      <span>${m.label}</span>
-      <button class="copy-btn" id="copy-${m.id}" onclick="copyMsg(${m.id})">複製</button>
-    </div>
-    <div class="msg-text">${m.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
-  </div>`;
-}
+function msgCard(m){return `<div class="msg-card"><div class="msg-card-header"><div class="msg-label">${m.label}</div><div class="msg-cat-badge">${catNames[m.cat]||m.cat}</div></div><div class="msg-actions"><button class="copy-btn" id="copy-${m.id}" onclick="window.copyMsg('${m.id}')">複製</button><button class="edit-btn" onclick="window.openEditMsg('${m.id}')">編輯</button><button class="del-btn" onclick="window.delMsg('${m.id}')">刪除</button></div><div class="msg-text">${m.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div>`;}
 
-function copyMsg(id){
-  const m=messages.find(x=>x.id===id); if(!m) return;
-  navigator.clipboard.writeText(m.text).catch(()=>{
-    const ta=document.createElement('textarea');
-    ta.value=m.text; document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-  }).finally(()=>{});
-  const btn=document.getElementById('copy-'+id);
-  if(btn){btn.textContent='已複製';btn.classList.add('copied');setTimeout(()=>{btn.textContent='複製';btn.classList.remove('copied');},2000);}
-}
-
-window.filterMsgCat=function(cat,btn){
-  currentMsgCat=cat;
-  document.querySelectorAll('.msg-tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  renderMessages();
-}
-
-window.searchMessages=function(){
-  currentSearch=document.getElementById('search').value.trim();
-  renderMessages();
-}
-
-// 分頁切換
-window.switchPage=function(page,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  btn.classList.add('active');
-}
-
-renderMessages();
+window.copyMsg=function(id){const m=msgs.find(x=>x.id===id);if(!m)return;navigator.clipboard.writeText(m.text).catch(()=>{const ta=document.createElement('textarea');ta.value=m.text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);});const btn=document.getElementById('copy-'+id);if(btn){btn.textContent='已複製';btn.classList.add('copied');setTimeout(()=>{btn.textContent='複製';btn.classList.remove('copied');},2000);}}
+window.openMsgModal=function(){editMsgId=null;document.getElementById('msg-modal-title').textContent='新增訊息';document.getElementById('m-label').value='';document.getElementById('m-cat').value='common';document.getElementById('m-text').value='';document.getElementById('msg-modal').classList.add('show');}
+window.openEditMsg=function(id){const m=msgs.find(x=>x.id===id);if(!m)return;editMsgId=id;document.getElementById('msg-modal-title').textContent='編輯訊息';document.getElementById('m-label').value=m.label;document.getElementById('m-cat').value=m.cat;document.getElementById('m-text').value=m.text;document.getElementById('msg-modal').classList.add('show');}
+window.closeMsgModal=function(){document.getElementById('msg-modal').classList.remove('show');}
+window.saveMsg=async function(){const label=document.getElementById('m-label').value.trim(),text=document.getElementById('m-text').value.trim();if(!label||!text){alert('請填寫標題和內容');return;}const data={label,cat:document.getElementById('m-cat').value,text,createdAt:serverTimestamp()};if(editMsgId){await updateDoc(doc(db,'messages',editMsgId),data);}else{await addDoc(msgsRef,data);}window.closeMsgModal();}
+window.delMsg=async function(id){if(!confirm('確定要刪除這則訊息嗎？'))return;await deleteDoc(doc(db,'messages',id));}
+window.filterMsgCat=function(cat,btn){currentMsgCat=cat;document.querySelectorAll('.msg-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');window.renderMessages();}
+window.switchPage=function(page,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');btn.classList.add('active');}
+document.getElementById('client-modal').addEventListener('click',function(e){if(e.target===this)window.closeClientModal();});
+document.getElementById('msg-modal').addEventListener('click',function(e){if(e.target===this)window.closeMsgModal();});
 </script>
 </body>
 </html>
