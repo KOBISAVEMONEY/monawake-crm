@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>伴夢伴醒 · 獲客行事曆</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+  :root {
+    --bg:#1a1b2e; --bg2:#20213a; --bg3:#272848;
+    --gold:#c8a84b; --gold2:rgba(200,168,75,0.15);
+    --white:rgba(255,255,255,0.88); --dim:rgba(255,255,255,0.45);
+    --red:#e07070; --green:#70c090; --yellow:#e0c070;
+    --border:rgba(200,168,75,0.18);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background:var(--bg); color:var(--white); font-family:'Noto Sans TC',sans-serif; min-height:100vh; max-width:600px; margin:0 auto; }
+
+  .top-nav { position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border); padding:12px 16px; display:flex; align-items:center; gap:8px; overflow-x:auto; }
+  .top-nav::-webkit-scrollbar { display:none; }
+  .nav-brand { font-family:'Noto Serif TC',serif; font-size:14px; color:var(--gold); letter-spacing:2px; flex-shrink:0; margin-right:4px; }
+  .nav-tab { padding:7px 12px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; flex-shrink:0; }
+  .nav-tab.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
+
+  .page { display:none; padding:16px; }
+  .page.active { display:block; }
+
+  .loading { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; gap:16px; }
+  .loading-text { color:var(--gold); font-family:'Noto Serif TC',serif; font-size:16px; letter-spacing:4px; }
+  .spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  .section-title { font-size:12px; color:var(--gold); letter-spacing:3px; margin-bottom:10px; margin-top:20px; display:flex; align-items:center; gap:8px; }
+  .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .section-title:first-child { margin-top:0; }
+
+  .add-btn { background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; width:100%; margin-bottom:16px; }
+
+  /* Stats overview */
+  .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px; }
+  .stat { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; }
+  .stat-num { font-size:22px; font-weight:500; color:var(--gold); font-family:'Noto Serif TC',serif; }
+  .stat-label { font-size:11px; color:var(--dim); margin-top:3px; letter-spacing:1px; }
+
+  /* Chart */
+  .chart-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; }
+  .chart-title { font-size:12px; color:var(--dim); letter-spacing:1px; margin-bottom:12px; }
+  canvas { max-height:220px; }
+
+  /* Toggle buttons for chart metric */
+  .metric-toggle { display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; }
+  .metric-toggle::-webkit-scrollbar { display:none; }
+  .metric-btn { padding:5px 12px; border-radius:16px; font-size:11px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; white-space:nowrap; flex-shrink:0; }
+  .metric-btn.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
+
+  /* Entry cards (Reels log) */
+  .entry-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+  .entry-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:8px; }
+  .entry-day { font-size:14px; color:var(--gold); font-weight:500; }
+  .entry-date { font-size:11px; color:var(--dim); margin-top:2px; }
+  .entry-actions { display:flex; gap:6px; }
+  .entry-btn { background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--dim); padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer; }
+  .entry-btn.del { background:rgba(224,112,112,0.06); border-color:rgba(224,112,112,0.2); color:var(--red); }
+  .entry-theme { font-size:13px; color:var(--white); margin-bottom:10px; padding:8px 10px; background:var(--bg3); border-radius:8px; }
+  .entry-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .metric-box { background:var(--bg3); border-radius:8px; padding:6px; text-align:center; }
+  .metric-val { font-size:15px; color:var(--gold); font-weight:500; }
+  .metric-lbl { font-size:9px; color:var(--dim); margin-top:2px; }
+
+  /* Idea cards */
+  .idea-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+  .idea-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px; }
+  .idea-title { font-size:14px; color:var(--white); font-weight:500; flex:1; }
+  .idea-tag { font-size:10px; color:var(--dim); background:var(--bg3); padding:2px 8px; border-radius:10px; white-space:nowrap; }
+  .idea-desc { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.7; white-space:pre-wrap; }
+  .idea-actions { display:flex; gap:6px; margin-top:10px; }
+
+  /* Platform totals */
+  .platform-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; }
+  .platform-icon { width:40px; height:40px; border-radius:10px; background:var(--gold2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+  .platform-info { flex:1; }
+  .platform-name { font-size:13px; color:var(--white); margin-bottom:2px; }
+  .platform-sub { font-size:11px; color:var(--dim); }
+  .platform-num { font-size:22px; color:var(--gold); font-family:'Noto Serif TC',serif; font-weight:500; }
+  .platform-edit { background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--dim); padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer; margin-left:8px; }
+
+  .empty { text-align:center; color:var(--dim); font-size:13px; padding:30px; letter-spacing:1px; }
+
+  /* Modal */
+  .modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.8); z-index:200; justify-content:center; align-items:flex-end; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px 20px 0 0; padding:24px 20px 36px; width:100%; max-width:600px; max-height:92vh; overflow-y:auto; }
+  .drag-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 20px; }
+  .modal h3 { font-family:'Noto Serif TC',serif; color:var(--gold); font-size:16px; letter-spacing:2px; margin-bottom:20px; text-align:center; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .form-group { margin-bottom:14px; }
+  .form-group label { display:block; font-size:12px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; }
+  .form-group input, .form-group select, .form-group textarea { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:12px; color:var(--white); font-size:14px; font-family:'Noto Sans TC',sans-serif; outline:none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--gold); }
+  .form-group select option { background:var(--bg2); }
+  .modal-btns { display:flex; gap:10px; margin-top:20px; }
+  .btn-primary { flex:1; background:var(--gold); color:var(--bg); border:none; border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-weight:500; font-family:'Noto Sans TC',sans-serif; }
+  .btn-cancel { flex:1; background:transparent; color:var(--dim); border:1px solid var(--border); border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-family:'Noto Sans TC',sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <div class="nav-brand">伴夢伴醒</div>
+  <button class="nav-tab active" onclick="switchPage('overview',this)">總覽</button>
+  <button class="nav-tab" onclick="switchPage('reels',this)">Reels記錄</button>
+  <button class="nav-tab" onclick="switchPage('platforms',this)">平台總數</button>
+  <button class="nav-tab" onclick="switchPage('ideas',this)">內容靈感</button>
+</div>
+
+<div id="loading">
+  <div class="loading"><div class="spinner"></div><div class="loading-text">連線中</div></div>
+</div>
+
+<div id="app" style="display:none">
+
+  <!-- 總覽頁 -->
+  <div class="page active" id="page-overview">
+    <div class="section-title">本週概況</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="ov-total-views">0</div><div class="stat-label">Reels總觀看</div></div>
+      <div class="stat"><div class="stat-num" id="ov-avg-views">0</div><div class="stat-label">平均觀看/篇</div></div>
+      <div class="stat"><div class="stat-num" id="ov-entries">0</div><div class="stat-label">已記錄天數</div></div>
+      <div class="stat"><div class="stat-num" id="ov-ideas">0</div><div class="stat-label">內容靈感庫</div></div>
+    </div>
+
+    <div class="section-title">趨勢圖</div>
+    <div class="chart-card">
+      <div class="metric-toggle">
+        <button class="metric-btn active" onclick="setMetric('views',this)">觀看次數</button>
+        <button class="metric-btn" onclick="setMetric('reach',this)">觸及帳號</button>
+        <button class="metric-btn" onclick="setMetric('avgTime',this)">平均觀看(秒)</button>
+        <button class="metric-btn" onclick="setMetric('likes',this)">讚數</button>
+      </div>
+      <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="section-title">最新記錄</div>
+    <div id="ov-recent"></div>
+  </div>
+
+  <!-- Reels記錄頁 -->
+  <div class="page" id="page-reels">
+    <button class="add-btn" onclick="openReelModal()">+ 新增今日 Reels 記錄</button>
+    <div id="reels-list"></div>
+  </div>
+
+  <!-- 平台總數頁 -->
+  <div class="page" id="page-platforms">
+    <div class="section-title">各平台目前數字</div>
+    <div id="platforms-list"></div>
+  </div>
+
+  <!-- 內容靈感頁 -->
+  <div class="page" id="page-ideas">
+    <button class="add-btn" onclick="openIdeaModal()">+ 新增內容靈感</button>
+    <div id="ideas-list"></div>
+  </div>
+
+</div>
+
+<!-- Reel Modal -->
+<div class="modal-overlay" id="reel-modal">
+  <div class="modal">
+    <div class="drag-handle"></div>
+    <h3 id="reel-modal-title">新增 Reels 記錄</h3>
+    <div class="form-row">
+      <div class="form-group"><label>Day</label><input type="text" id="r-day" placeholder="例：Day6"></div>
+      <div class="form-group"><label>日期</label><input type="date" id="r-date"></div>
+    </div>
+    <div class="form-group"><label>內容主題</label><input type="text" id="r-theme" placeholder="例：不應住色生心 - 社群比較版"></div>
+    <div class="form-row">
+      <div class="form-group"><label>觀看次數</label><input type="number" id="r-views" placeholder="0"></div>
+      <div class="form-group"><label>觸及帳號</label><input type="number" id="r-reach" placeholder="0"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>平均觀看(秒)</label><input type="number" id="r-avgtime" placeholder="0"></div>
+      <div class="form-group"><label>讚數</label><input type="number" id="r-likes" placeholder="0"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>留言數</label><input type="number" id="r-comments" placeholder="0"></div>
+      <div class="form-group"><label>收藏數</label><input type="number" id="r-saves" placeholder="0"></div>
+    </div>
+    <div class="form-group"><label>新增粉絲</label><input type="number" id="r-newfollowers" placeholder="0"></div>
+    <div class="form-group"><label>備註/觀察</label><textarea id="r-note" rows="2" placeholder="例：用了自己的YouTube音樂當背景"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeReelModal()">取消</button>
+      <button class="btn-primary" onclick="saveReel()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Platform Modal -->
+<div class="modal-overlay" id="platform-modal">
+  <div class="modal">
+    <div class="drag-handle"></div>
+    <h3>更新平台數字</h3>
+    <div class="form-group"><label id="p-name-label">平台名稱</label><input type="number" id="p-value" placeholder="0"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closePlatformModal()">取消</button>
+      <button class="btn-primary" onclick="savePlatform()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Idea Modal -->
+<div class="modal-overlay" id="idea-modal">
+  <div class="modal">
+    <div class="drag-handle"></div>
+    <h3 id="idea-modal-title">新增內容靈感</h3>
+    <div class="form-group"><label>標題</label><input type="text" id="i-title" placeholder="例：半夜刷手機"></div>
+    <div class="form-group"><label>分類</label>
+      <select id="i-tag">
+        <option value="經文">經文方向</option>
+        <option value="生活比喻">生活比喻</option>
+        <option value="待嘗試">待嘗試主題</option>
+        <option value="其他">其他</option>
+      </select>
+    </div>
+    <div class="form-group"><label>內容描述</label><textarea id="i-desc" rows="4" placeholder="記下你的想法..."></textarea></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeIdeaModal()">取消</button>
+      <button class="btn-primary" onclick="saveIdea()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDvokbEafyLb7s5KihFJ1PSvy4assuzeb0",
+  authDomain: "monawake-c5c69.firebaseapp.com",
+  projectId: "monawake-c5c69",
+  storageBucket: "monawake-c5c69.firebasestorage.app",
+  messagingSenderId: "159548017770",
+  appId: "1:159548017770:web:eeb75db8f1043295824e13",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const reelsRef = collection(db, 'growth_reels');
+const ideasRef = collection(db, 'growth_ideas');
+const platformsRef = doc(db, 'growth_platforms', 'main');
+
+let reels = [];
+let ideas = [];
+let platforms = {
+  youtube: 0, ig_followers: 0, threads: 0, line: 0
+};
+let editReelId = null;
+let editIdeaId = null;
+let editPlatformKey = null;
+let currentMetric = 'views';
+let chartInstance = null;
+let loadedCount = 0;
+
+function checkAllLoaded() {
+  loadedCount++;
+  if (loadedCount >= 3) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+}
+
+// Listen to reels
+onSnapshot(query(reelsRef, orderBy('date', 'asc')), snap => {
+  reels = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderAll();
+  checkAllLoaded();
+});
+
+// Listen to ideas
+onSnapshot(query(ideasRef, orderBy('createdAt', 'desc')), snap => {
+  ideas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderIdeas();
+  checkAllLoaded();
+});
+
+// Listen to platforms
+onSnapshot(platformsRef, snap => {
+  if (snap.exists()) {
+    platforms = { ...platforms, ...snap.data() };
+  }
+  renderPlatforms();
+  checkAllLoaded();
+});
+
+function renderAll() {
+  renderOverview();
+  renderReelsList();
+}
+
+// ===== Overview =====
+function renderOverview() {
+  const totalViews = reels.reduce((s, r) => s + (Number(r.views) || 0), 0);
+  const avgViews = reels.length ? Math.round(totalViews / reels.length) : 0;
+  document.getElementById('ov-total-views').textContent = totalViews.toLocaleString();
+  document.getElementById('ov-avg-views').textContent = avgViews.toLocaleString();
+  document.getElementById('ov-entries').textContent = reels.length;
+  document.getElementById('ov-ideas').textContent = ideas.length;
+
+  const recentEl = document.getElementById('ov-recent');
+  const recent = [...reels].slice(-3).reverse();
+  if (!recent.length) {
+    recentEl.innerHTML = '<div class="empty">還沒有記錄，去「Reels記錄」新增第一筆吧</div>';
+  } else {
+    recentEl.innerHTML = recent.map(r => reelCardHtml(r, true)).join('');
+  }
+
+  renderChart();
+}
+
+function renderChart() {
+  const ctx = document.getElementById('trendChart');
+  const labels = reels.map(r => r.day || r.date);
+  const metricMap = {
+    views: 'views', reach: 'reach', avgTime: 'avgtime', likes: 'likes'
+  };
+  const field = metricMap[currentMetric];
+  const data = reels.map(r => Number(r[field]) || 0);
+
+  if (chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: currentMetric,
+        data,
+        borderColor: '#c8a84b',
+        backgroundColor: 'rgba(200,168,75,0.1)',
+        fill: true,
+        tension: 0.3,
+        pointBackgroundColor: '#c8a84b',
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+}
+
+window.setMetric = function(metric, btn) {
+  currentMetric = metric;
+  document.querySelectorAll('.metric-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderChart();
+}
+
+// ===== Reels =====
+function reelCardHtml(r, compact = false) {
+  return `<div class="entry-card">
+    <div class="entry-top">
+      <div>
+        <div class="entry-day">${r.day || ''}</div>
+        <div class="entry-date">${r.date || ''}</div>
+      </div>
+      ${compact ? '' : `<div class="entry-actions">
+        <button class="entry-btn" onclick="window.openEditReel('${r.id}')">編輯</button>
+        <button class="entry-btn del" onclick="window.deleteReel('${r.id}')">刪除</button>
+      </div>`}
+    </div>
+    <div class="entry-theme">${r.theme || '(未填寫主題)'}</div>
+    <div class="entry-metrics">
+      <div class="metric-box"><div class="metric-val">${r.views||0}</div><div class="metric-lbl">觀看</div></div>
+      <div class="metric-box"><div class="metric-val">${r.reach||0}</div><div class="metric-lbl">觸及</div></div>
+      <div class="metric-box"><div class="metric-val">${r.avgtime||0}s</div><div class="metric-lbl">平均觀看</div></div>
+      <div class="metric-box"><div class="metric-val">${r.likes||0}</div><div class="metric-lbl">讚</div></div>
+    </div>
+    ${r.note ? `<div class="card-note" style="margin-top:8px;font-size:12px;color:var(--dim);font-style:italic;padding:6px 10px;background:var(--bg3);border-radius:6px;">${r.note}</div>` : ''}
+  </div>`;
+}
+
+function renderReelsList() {
+  const el = document.getElementById('reels-list');
+  if (!reels.length) {
+    el.innerHTML = '<div class="empty">還沒有記錄，點上方按鈕新增</div>';
+    return;
+  }
+  el.innerHTML = [...reels].reverse().map(r => reelCardHtml(r, false)).join('');
+}
+
+window.openReelModal = function() {
+  editReelId = null;
+  document.getElementById('reel-modal-title').textContent = '新增 Reels 記錄';
+  document.getElementById('r-day').value = `Day${reels.length + 1}`;
+  document.getElementById('r-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('r-theme').value = '';
+  document.getElementById('r-views').value = '';
+  document.getElementById('r-reach').value = '';
+  document.getElementById('r-avgtime').value = '';
+  document.getElementById('r-likes').value = '';
+  document.getElementById('r-comments').value = '';
+  document.getElementById('r-saves').value = '';
+  document.getElementById('r-newfollowers').value = '';
+  document.getElementById('r-note').value = '';
+  document.getElementById('reel-modal').classList.add('show');
+}
+
+window.openEditReel = function(id) {
+  const r = reels.find(x => x.id === id);
+  if (!r) return;
+  editReelId = id;
+  document.getElementById('reel-modal-title').textContent = '編輯 Reels 記錄';
+  document.getElementById('r-day').value = r.day || '';
+  document.getElementById('r-date').value = r.date || '';
+  document.getElementById('r-theme').value = r.theme || '';
+  document.getElementById('r-views').value = r.views || '';
+  document.getElementById('r-reach').value = r.reach || '';
+  document.getElementById('r-avgtime').value = r.avgtime || '';
+  document.getElementById('r-likes').value = r.likes || '';
+  document.getElementById('r-comments').value = r.comments || '';
+  document.getElementById('r-saves').value = r.saves || '';
+  document.getElementById('r-newfollowers').value = r.newfollowers || '';
+  document.getElementById('r-note').value = r.note || '';
+  document.getElementById('reel-modal').classList.add('show');
+}
+
+window.closeReelModal = function() {
+  document.getElementById('reel-modal').classList.remove('show');
+}
+
+window.saveReel = async function() {
+  const data = {
+    day: document.getElementById('r-day').value.trim(),
+    date: document.getElementById('r-date').value,
+    theme: document.getElementById('r-theme').value.trim(),
+    views: Number(document.getElementById('r-views').value) || 0,
+    reach: Number(document.getElementById('r-reach').value) || 0,
+    avgtime: Number(document.getElementById('r-avgtime').value) || 0,
+    likes: Number(document.getElementById('r-likes').value) || 0,
+    comments: Number(document.getElementById('r-comments').value) || 0,
+    saves: Number(document.getElementById('r-saves').value) || 0,
+    newfollowers: Number(document.getElementById('r-newfollowers').value) || 0,
+    note: document.getElementById('r-note').value.trim(),
+  };
+  try {
+    if (editReelId) {
+      await updateDoc(doc(db, 'growth_reels', editReelId), data);
+    } else {
+      await addDoc(reelsRef, { ...data, createdAt: serverTimestamp() });
+    }
+    window.closeReelModal();
+  } catch(e) { alert('儲存失敗: ' + e.message); }
+}
+
+window.deleteReel = async function(id) {
+  if (!confirm('確定要刪除這筆記錄嗎？')) return;
+  await deleteDoc(doc(db, 'growth_reels', id));
+}
+
+// ===== Platforms =====
+const platformMeta = [
+  { key: 'youtube', name: 'YouTube 訂閱', icon: '📺', sub: '訂閱人數' },
+  { key: 'ig_followers', name: 'IG 粉絲', icon: '📷', sub: '粉絲人數' },
+  { key: 'threads', name: 'Threads 追蹤', icon: '🧵', sub: '追蹤人數' },
+  { key: 'line', name: 'LINE 好友', icon: '💬', sub: '好友人數' },
+];
+
+function renderPlatforms() {
+  const el = document.getElementById('platforms-list');
+  el.innerHTML = platformMeta.map(p => `
+    <div class="platform-card">
+      <div class="platform-icon">${p.icon}</div>
+      <div class="platform-info">
+        <div class="platform-name">${p.name}</div>
+        <div class="platform-sub">${p.sub}</div>
+      </div>
+      <div class="platform-num">${platforms[p.key] || 0}</div>
+      <button class="platform-edit" onclick="window.openPlatformModal('${p.key}','${p.name}')">更新</button>
+    </div>
+  `).join('');
+}
+
+window.openPlatformModal = function(key, name) {
+  editPlatformKey = key;
+  document.getElementById('p-name-label').textContent = name;
+  document.getElementById('p-value').value = platforms[key] || 0;
+  document.getElementById('platform-modal').classList.add('show');
+}
+
+window.closePlatformModal = function() {
+  document.getElementById('platform-modal').classList.remove('show');
+}
+
+window.savePlatform = async function() {
+  const val = Number(document.getElementById('p-value').value) || 0;
+  const updateData = { [editPlatformKey]: val };
+  try {
+    await setDoc(platformsRef, updateData, { merge: true });
+    window.closePlatformModal();
+  } catch(e) { alert('儲存失敗: ' + e.message); }
+}
+
+// ===== Ideas =====
+function renderIdeas() {
+  const el = document.getElementById('ideas-list');
+  if (!ideas.length) {
+    el.innerHTML = '<div class="empty">還沒有靈感，點上方按鈕新增</div>';
+    return;
+  }
+  el.innerHTML = ideas.map(i => `
+    <div class="idea-card">
+      <div class="idea-top">
+        <div class="idea-title">${i.title}</div>
+        <div class="idea-tag">${i.tag || ''}</div>
+      </div>
+      <div class="idea-desc">${(i.desc||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <div class="idea-actions">
+        <button class="entry-btn" onclick="window.openEditIdea('${i.id}')">編輯</button>
+        <button class="entry-btn del" onclick="window.deleteIdea('${i.id}')">刪除</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('ov-ideas') && (document.getElementById('ov-ideas').textContent = ideas.length);
+}
+
+window.openIdeaModal = function() {
+  editIdeaId = null;
+  document.getElementById('idea-modal-title').textContent = '新增內容靈感';
+  document.getElementById('i-title').value = '';
+  document.getElementById('i-tag').value = '經文';
+  document.getElementById('i-desc').value = '';
+  document.getElementById('idea-modal').classList.add('show');
+}
+
+window.openEditIdea = function(id) {
+  const i = ideas.find(x => x.id === id);
+  if (!i) return;
+  editIdeaId = id;
+  document.getElementById('idea-modal-title').textContent = '編輯內容靈感';
+  document.getElementById('i-title').value = i.title || '';
+  document.getElementById('i-tag').value = i.tag || '經文';
+  document.getElementById('i-desc').value = i.desc || '';
+  document.getElementById('idea-modal').classList.add('show');
+}
+
+window.closeIdeaModal = function() {
+  document.getElementById('idea-modal').classList.remove('show');
+}
+
+window.saveIdea = async function() {
+  const title = document.getElementById('i-title').value.trim();
+  if (!title) { alert('請輸入標題'); return; }
+  const data = {
+    title,
+    tag: document.getElementById('i-tag').value,
+    desc: document.getElementById('i-desc').value.trim(),
+  };
+  try {
+    if (editIdeaId) {
+      await updateDoc(doc(db, 'growth_ideas', editIdeaId), data);
+    } else {
+      await addDoc(ideasRef, { ...data, createdAt: serverTimestamp() });
+    }
+    window.closeIdeaModal();
+  } catch(e) { alert('儲存失敗: ' + e.message); }
+}
+
+window.deleteIdea = async function(id) {
+  if (!confirm('確定要刪除這個靈感嗎？')) return;
+  await deleteDoc(doc(db, 'growth_ideas', id));
+}
+
+// ===== Page switching =====
+window.switchPage = function(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  btn.classList.add('active');
+  if (page === 'overview') renderChart();
+}
+
+// Modal click outside to close
+['reel-modal','platform-modal','idea-modal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('show');
+  });
+});
+</script>
+</body>
+</html>
