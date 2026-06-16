@@ -108,10 +108,10 @@
 
 <div class="top-nav">
   <div class="nav-brand">伴夢伴醒</div>
-  <button class="nav-tab active" onclick="switchPage('overview',this)">總覽</button>
-  <button class="nav-tab" onclick="switchPage('reels',this)">Reels記錄</button>
-  <button class="nav-tab" onclick="switchPage('platforms',this)">平台總數</button>
-  <button class="nav-tab" onclick="switchPage('ideas',this)">內容靈感</button>
+  <button class="nav-tab active" data-page="overview">總覽</button>
+  <button class="nav-tab" data-page="reels">Reels記錄</button>
+  <button class="nav-tab" data-page="platforms">平台總數</button>
+  <button class="nav-tab" data-page="ideas">內容靈感</button>
 </div>
 
 <div id="loading">
@@ -231,6 +231,21 @@
   </div>
 </div>
 
+<script>
+// 立即綁定分頁切換，不依賴 module script 載入完成
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.nav-tab').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const page = this.dataset.page;
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      this.classList.add('active');
+      if (page === 'overview' && window.renderChart) window.renderChart();
+    });
+  });
+});
+</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
@@ -576,14 +591,7 @@ window.deleteIdea = async function(id) {
   await deleteDoc(doc(db, 'growth_ideas', id));
 }
 
-// ===== Page switching =====
-window.switchPage = function(page, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  btn.classList.add('active');
-  if (page === 'overview') renderChart();
-}
+window.renderChart = renderChart;
 
 // Modal click outside to close
 ['reel-modal','platform-modal','idea-modal'].forEach(id => {
@@ -594,3 +602,4 @@ window.switchPage = function(page, btn) {
 </script>
 </body>
 </html>
+
