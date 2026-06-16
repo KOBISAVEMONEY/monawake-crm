@@ -87,6 +87,32 @@
 
   .empty { text-align:center; color:var(--dim); font-size:13px; padding:30px; letter-spacing:1px; }
 
+  /* Generator */
+  .gen-controls { margin-bottom:16px; }
+  #gen-btn:disabled { opacity:0.5; cursor:not-allowed; }
+  .gen-status-box { display:flex; align-items:center; gap:10px; padding:16px; color:var(--dim); font-size:13px; }
+  .gen-spinner { width:18px; height:18px; border:2px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; flex-shrink:0; }
+  .gen-error { color:var(--red); font-size:13px; padding:12px 16px; background:rgba(224,112,112,0.08); border:1px solid rgba(224,112,112,0.2); border-radius:10px; margin-bottom:12px; }
+
+  .option-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; cursor:pointer; transition:border-color 0.2s; }
+  .option-card:active { border-color:var(--gold); }
+  .option-num { font-size:11px; color:var(--gold); letter-spacing:2px; margin-bottom:6px; }
+  .option-quote { font-family:'Noto Serif TC',serif; font-size:16px; color:var(--gold); margin-bottom:8px; }
+  .option-preview { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.7; }
+  .option-pick-btn { margin-top:12px; width:100%; background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:10px; border-radius:8px; font-size:13px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; }
+
+  .gen-result { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:18px; margin-top:16px; }
+  .gen-result-title { font-size:12px; color:var(--gold); letter-spacing:2px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
+  .gen-block { margin-bottom:16px; }
+  .gen-block-label { font-size:11px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; }
+  .gen-block-text { font-size:13px; color:rgba(255,255,255,0.8); line-height:1.8; white-space:pre-wrap; padding:10px 12px; background:var(--bg3); border-radius:8px; }
+  .gen-slide { margin-bottom:8px; }
+  .gen-slide-num { font-size:10px; color:var(--dim); margin-bottom:3px; }
+  .gen-copy-btn { background:var(--gold2); border:1px solid rgba(200,168,75,0.3); color:var(--gold); padding:3px 10px; border-radius:6px; font-size:10px; cursor:pointer; }
+  .gen-copy-btn.copied { background:rgba(112,192,144,0.2); border-color:rgba(112,192,144,0.4); color:var(--green); }
+  .gen-save-btn { width:100%; background:var(--gold); color:var(--bg); border:none; border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-weight:500; margin-top:8px; font-family:'Noto Sans TC',sans-serif; }
+  .gen-back-btn { width:100%; background:transparent; color:var(--dim); border:1px solid var(--border); border-radius:10px; padding:12px; cursor:pointer; font-size:13px; margin-top:8px; font-family:'Noto Sans TC',sans-serif; }
+
   /* Modal */
   .modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.8); z-index:200; justify-content:center; align-items:flex-end; }
   .modal-overlay.show { display:flex; }
@@ -109,6 +135,7 @@
 <div class="top-nav">
   <div class="nav-brand">伴夢伴醒</div>
   <button class="nav-tab active" data-page="overview">總覽</button>
+  <button class="nav-tab" data-page="generate">生成內容</button>
   <button class="nav-tab" data-page="reels">Reels記錄</button>
   <button class="nav-tab" data-page="platforms">平台總數</button>
   <button class="nav-tab" data-page="ideas">內容靈感</button>
@@ -143,6 +170,20 @@
 
     <div class="section-title">最新記錄</div>
     <div id="ov-recent"></div>
+  </div>
+
+  <!-- 生成內容頁 -->
+  <div class="page" id="page-generate">
+    <div class="gen-controls">
+      <div class="form-group">
+        <label>想要的主題方向（選填，留空讓AI自由發揮）</label>
+        <input type="text" id="gen-direction" placeholder="例：職場、感情、自我價值、社群焦慮...">
+      </div>
+      <button class="add-btn" id="gen-btn" onclick="generateContent()">✨ 生成 3 個今日內容選項</button>
+    </div>
+    <div id="gen-status"></div>
+    <div id="gen-options"></div>
+    <div id="gen-selected"></div>
   </div>
 
   <!-- Reels記錄頁 -->
@@ -217,6 +258,7 @@
     <div class="form-group"><label>標題</label><input type="text" id="i-title" placeholder="例：半夜刷手機"></div>
     <div class="form-group"><label>分類</label>
       <select id="i-tag">
+        <option value="待製作">待製作（AI生成）</option>
         <option value="經文">經文方向</option>
         <option value="生活比喻">生活比喻</option>
         <option value="待嘗試">待嘗試主題</option>
@@ -591,6 +633,192 @@ window.deleteIdea = async function(id) {
   await deleteDoc(doc(db, 'growth_ideas', id));
 }
 
+// ===== Content Generator =====
+const SYSTEM_PROMPT = `你是「伴夢伴醒」這個品牌的內容寫手。這是一個結合金剛經智慧與現代生活比喻的 Instagram 內容系列，叫做「一日一句金剛經」。
+
+品牌調性與規則（必須嚴格遵守）：
+- 使用繁體字，絕對不能出現任何簡體字
+- 絕對不能使用「樹洞」這個詞
+- 不說教、不給直接建議，而是用「你是不是也這樣」的方式引發共鳴，陪伴讀者「看見」自己的狀態，不是教讀者「應該怎麼做」
+- 語氣溫柔、有質感，像一個看透了但不說破的朋友
+- 不使用 emoji
+- 最容易引起共鳴與高觸及的內容主題，是「當下正在發生的小動作」（例如：已讀不回、打字打到一半刪掉、半夜刷手機），而不是抽象的「人生哲理」層級主題（例如：人生方向、選擇焦慮）。這類具體、即時、每個人都在經歷的場景效果最好。
+
+內容結構（四段式，每段對應輪播一張）：
+第1張：描述一個具體的生活場景/小動作，引發「啊，我也這樣」的共鳴
+第2張：用一個貼切的生活比喻，延伸這個感受（比喻要非常生活化、具體，像是：打翻的水、已經寄出的信、修過光的照片，不要用太抽象的比喻）
+第3張：點出對應的金剛經經文，用白話解釋經文跟前面場景的關聯
+第4張：收尾的金句，給讀者一個溫柔的、不說教的提醒或轉念角度
+
+請根據使用者提供的方向（如果有），生成 3 個不同的內容選項。如果使用者沒給方向，請自由發揮，但優先選擇「當下正在發生的小動作」類型的主題。
+
+每個選項請用以下 JSON 格式回覆，整個回覆必須是一個 JSON 陣列，不要有任何其他文字、不要用 markdown 的 \`\`\`json 包裹，直接輸出純 JSON：
+
+[
+  {
+    "quote": "經文原句（4-12字精簡版，適合手寫）",
+    "fullQuote": "經文完整版（如果跟quote不同的話，否則填一樣的）",
+    "previewText": "一句話預覽這個選項在講什麼情境（給使用者快速判斷用，15字以內）",
+    "slides": [
+      "第1張文字內容（用換行符號\\n分段，模擬詩句排版）",
+      "第2張文字內容",
+      "第3張文字內容",
+      "第4張文字內容"
+    ],
+    "igCaption": "IG貼文文案，整合四張內容成一段連貫文字，最後加上 hashtag：#伴夢伴醒 #金剛經 #一日一句 #手寫文字 #文字療癒 #你還好嗎 加上2-3個跟主題相關的hashtag",
+    "threadsText": "Threads文字，取輪播中最有力的1-2句金句，簡短",
+    "reelsScript": "Reels影片口播文字稿，格式為：隨手抽一支筆，寫下今天的金剛經\\n「經文」\\n你們知道是什麼意思嗎？\\n簡單來說——[一句話帶過經文意思]\\n有點難懂對吧？\\n晚上用一個小例子，解釋給你聽\\n——\\n一日一句金剛經\\n用古老的智慧\\n說現代人的心事"
+  }
+]`;
+
+window.generateContent = async function() {
+  const direction = document.getElementById('gen-direction').value.trim();
+  const btn = document.getElementById('gen-btn');
+  const statusEl = document.getElementById('gen-status');
+  const optionsEl = document.getElementById('gen-options');
+  const selectedEl = document.getElementById('gen-selected');
+
+  btn.disabled = true;
+  optionsEl.innerHTML = '';
+  selectedEl.innerHTML = '';
+  statusEl.innerHTML = '<div class="gen-status-box"><div class="gen-spinner"></div><div>正在生成內容，請稍候...</div></div>';
+
+  const userMsg = direction
+    ? `請幫我生成今天的內容，主題方向：${direction}`
+    : `請幫我生成今天的內容，主題自由發揮，優先選擇當下正在發生的小動作類型。`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 4000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: "user", content: userMsg }],
+      })
+    });
+    const data = await response.json();
+    const textBlock = data.content.find(b => b.type === 'text');
+    if (!textBlock) throw new Error('AI 沒有回傳文字內容');
+
+    let cleaned = textBlock.text.trim().replace(/^```json\s*/i, '').replace(/```\s*$/,'').trim();
+    const options = JSON.parse(cleaned);
+
+    statusEl.innerHTML = '';
+    renderOptions(options);
+  } catch (e) {
+    statusEl.innerHTML = `<div class="gen-error">生成失敗：${e.message}<br>請再試一次，或檢查網路連線</div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderOptions(options) {
+  const optionsEl = document.getElementById('gen-options');
+  optionsEl.innerHTML = options.map((opt, idx) => `
+    <div class="option-card">
+      <div class="option-num">選項 ${idx + 1}</div>
+      <div class="option-quote">「${opt.quote}」</div>
+      <div class="option-preview">${opt.previewText}</div>
+      <button class="option-pick-btn" onclick="pickOption(${idx})">選這個，展開完整內容</button>
+    </div>
+  `).join('');
+  window._genOptions = options;
+}
+
+window.pickOption = function(idx) {
+  const opt = window._genOptions[idx];
+  document.getElementById('gen-options').innerHTML = '';
+  const selectedEl = document.getElementById('gen-selected');
+
+  selectedEl.innerHTML = `
+    <div class="gen-result">
+      <div class="gen-result-title">「${opt.fullQuote}」</div>
+
+      ${opt.slides.map((s, i) => `
+        <div class="gen-block gen-slide">
+          <div class="gen-block-label">
+            <span>第${i+1}張</span>
+            <button class="gen-copy-btn" onclick="copyGenText(this, ${JSON.stringify(s).replace(/"/g,'&quot;')})">複製</button>
+          </div>
+          <div class="gen-block-text">${escapeHtml(s)}</div>
+        </div>
+      `).join('')}
+
+      <div class="gen-block">
+        <div class="gen-block-label">
+          <span>IG 貼文文案</span>
+          <button class="gen-copy-btn" onclick="copyGenText(this, ${JSON.stringify(opt.igCaption).replace(/"/g,'&quot;')})">複製</button>
+        </div>
+        <div class="gen-block-text">${escapeHtml(opt.igCaption)}</div>
+      </div>
+
+      <div class="gen-block">
+        <div class="gen-block-label">
+          <span>Threads 文字</span>
+          <button class="gen-copy-btn" onclick="copyGenText(this, ${JSON.stringify(opt.threadsText).replace(/"/g,'&quot;')})">複製</button>
+        </div>
+        <div class="gen-block-text">${escapeHtml(opt.threadsText)}</div>
+      </div>
+
+      <div class="gen-block">
+        <div class="gen-block-label">
+          <span>Reels 口播文字稿</span>
+          <button class="gen-copy-btn" onclick="copyGenText(this, ${JSON.stringify(opt.reelsScript).replace(/"/g,'&quot;')})">複製</button>
+        </div>
+        <div class="gen-block-text">${escapeHtml(opt.reelsScript)}</div>
+      </div>
+
+      <button class="gen-save-btn" onclick="saveGeneratedToIdeas(${idx})">存到內容靈感庫</button>
+      <button class="gen-back-btn" onclick="backToOptions()">返回，重新選擇</button>
+    </div>
+  `;
+  window._currentPickedOpt = opt;
+}
+
+window.backToOptions = function() {
+  document.getElementById('gen-selected').innerHTML = '';
+  renderOptions(window._genOptions);
+}
+
+function escapeHtml(text) {
+  return (text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+window.copyGenText = function(btn, text) {
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const original = btn.textContent;
+  btn.textContent = '已複製';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 2000);
+}
+
+window.saveGeneratedToIdeas = async function(idx) {
+  const opt = window._currentPickedOpt;
+  if (!opt) return;
+  const fullDesc = `經文：${opt.fullQuote}\n\n${opt.slides.map((s,i)=>`【第${i+1}張】\n${s}`).join('\n\n')}\n\n【IG文案】\n${opt.igCaption}\n\n【Threads】\n${opt.threadsText}\n\n【Reels稿】\n${opt.reelsScript}`;
+  try {
+    await addDoc(ideasRef, {
+      title: opt.quote,
+      tag: '待製作',
+      desc: fullDesc,
+      createdAt: serverTimestamp(),
+    });
+    document.getElementById('gen-direction').value = '';
+    document.getElementById('gen-selected').innerHTML = '<div class="empty">已存到內容靈感庫！可以去那個分頁查看，或繼續生成下一篇</div>';
+  } catch(e) {
+    alert('儲存失敗: ' + e.message);
+  }
+}
+
 window.renderChart = renderChart;
 
 // Modal click outside to close
@@ -602,4 +830,3 @@ window.renderChart = renderChart;
 </script>
 </body>
 </html>
-
