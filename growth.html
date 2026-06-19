@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>創作者數據庫</title>
+<title>伴夢伴醒 · 獲客行事曆</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap');
@@ -17,78 +17,11 @@
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { background:var(--bg); color:var(--white); font-family:'Noto Sans TC',sans-serif; min-height:100vh; max-width:600px; margin:0 auto; }
 
-  /* ===== Google 登入畫面 ===== */
-  #auth-screen {
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:100vh; padding:40px 24px; gap:28px;
-  }
-  .auth-logo {
-    font-family:'Noto Serif TC',serif; font-size:26px; color:var(--gold);
-    letter-spacing:4px; text-align:center;
-  }
-  .auth-subtitle { font-size:13px; color:var(--dim); letter-spacing:2px; text-align:center; }
-  .auth-divider { width:1px; height:40px; background:var(--border); }
-  .google-btn {
-    display:flex; align-items:center; gap:12px;
-    background:#fff; color:#3c4043; border:none; border-radius:12px;
-    padding:14px 24px; font-size:15px; font-weight:500; cursor:pointer;
-    font-family:'Noto Sans TC',sans-serif; width:100%; max-width:280px;
-    justify-content:center; box-shadow:0 2px 12px rgba(0,0,0,0.2);
-    transition:box-shadow 0.2s;
-  }
-  .google-btn:hover { box-shadow:0 4px 20px rgba(0,0,0,0.3); }
-  .google-btn svg { flex-shrink:0; }
-  .auth-note { font-size:11px; color:var(--dim); text-align:center; line-height:1.8; letter-spacing:0.5px; }
-
-  /* ===== 設定品牌名稱畫面 ===== */
-  #brand-setup-screen {
-    display:none; flex-direction:column; align-items:center; justify-content:center;
-    min-height:100vh; padding:40px 24px; gap:20px;
-  }
-  .setup-title { font-family:'Noto Serif TC',serif; font-size:20px; color:var(--gold); letter-spacing:3px; text-align:center; }
-  .setup-desc { font-size:13px; color:var(--dim); text-align:center; line-height:1.8; }
-  .setup-input {
-    width:100%; max-width:320px; background:var(--bg2); border:1px solid var(--gold);
-    border-radius:12px; padding:16px; color:var(--white); font-size:16px;
-    font-family:'Noto Serif TC',serif; outline:none; letter-spacing:2px; text-align:center;
-  }
-  .setup-input::placeholder { color:var(--dim); letter-spacing:1px; }
-  .setup-btn {
-    background:var(--gold); color:var(--bg); border:none; border-radius:12px;
-    padding:14px 40px; font-size:14px; font-weight:500; cursor:pointer;
-    font-family:'Noto Sans TC',sans-serif; letter-spacing:2px;
-  }
-
-  /* ===== Top Nav ===== */
-  .top-nav {
-    position:sticky; top:0; z-index:50; background:var(--bg);
-    border-bottom:1px solid var(--border); padding:10px 16px;
-    display:flex; align-items:center; gap:8px; overflow-x:auto;
-  }
+  .top-nav { position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border); padding:12px 16px; display:flex; align-items:center; gap:8px; overflow-x:auto; }
   .top-nav::-webkit-scrollbar { display:none; }
-  .nav-brand {
-    font-family:'Noto Serif TC',serif; font-size:13px; color:var(--gold);
-    letter-spacing:2px; flex-shrink:0; margin-right:4px; cursor:pointer;
-    display:flex; align-items:center; gap:6px;
-  }
-  .nav-brand-edit { font-size:10px; color:var(--dim); opacity:0; transition:opacity 0.2s; }
-  .nav-brand:hover .nav-brand-edit { opacity:1; }
-  .nav-tab {
-    padding:7px 12px; border-radius:20px; font-size:12px; cursor:pointer;
-    border:1px solid var(--border); color:var(--dim); background:transparent;
-    font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; transition:all 0.2s;
-    white-space:nowrap; flex-shrink:0;
-  }
+  .nav-brand { font-family:'Noto Serif TC',serif; font-size:14px; color:var(--gold); letter-spacing:2px; flex-shrink:0; margin-right:4px; }
+  .nav-tab { padding:7px 12px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; flex-shrink:0; }
   .nav-tab.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
-
-  /* 使用者頭像 */
-  .nav-user {
-    margin-left:auto; flex-shrink:0; width:28px; height:28px; border-radius:50%;
-    overflow:hidden; border:1px solid var(--border); cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    background:var(--bg2); color:var(--dim); font-size:12px;
-  }
-  .nav-user img { width:100%; height:100%; object-fit:cover; }
 
   .page { display:none; padding:16px; }
   .page.active { display:block; }
@@ -104,20 +37,24 @@
 
   .add-btn { background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; width:100%; margin-bottom:16px; }
 
+  /* Stats overview */
   .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px; }
   .stat { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; }
   .stat-num { font-size:22px; font-weight:500; color:var(--gold); font-family:'Noto Serif TC',serif; }
   .stat-label { font-size:11px; color:var(--dim); margin-top:3px; letter-spacing:1px; }
 
+  /* Chart */
   .chart-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; }
   .chart-title { font-size:12px; color:var(--dim); letter-spacing:1px; margin-bottom:12px; }
   canvas { max-height:220px; }
 
+  /* Toggle buttons for chart metric */
   .metric-toggle { display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; }
   .metric-toggle::-webkit-scrollbar { display:none; }
   .metric-btn { padding:5px 12px; border-radius:16px; font-size:11px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; white-space:nowrap; flex-shrink:0; }
   .metric-btn.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
 
+  /* Entry cards (Reels log) */
   .entry-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
   .entry-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:8px; }
   .entry-day { font-size:14px; color:var(--gold); font-weight:500; }
@@ -131,6 +68,7 @@
   .metric-val { font-size:15px; color:var(--gold); font-weight:500; }
   .metric-lbl { font-size:9px; color:var(--dim); margin-top:2px; }
 
+  /* Idea cards */
   .idea-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
   .idea-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px; }
   .idea-title { font-size:14px; color:var(--white); font-weight:500; flex:1; }
@@ -138,6 +76,7 @@
   .idea-desc { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.7; white-space:pre-wrap; }
   .idea-actions { display:flex; gap:6px; margin-top:10px; }
 
+  /* Platform totals */
   .platform-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; }
   .platform-icon { width:40px; height:40px; border-radius:10px; background:var(--gold2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
   .platform-info { flex:1; }
@@ -148,23 +87,31 @@
 
   .empty { text-align:center; color:var(--dim); font-size:13px; padding:30px; letter-spacing:1px; }
 
-  /* User menu dropdown */
-  .user-menu {
-    position:fixed; top:52px; right:8px; background:var(--bg2);
-    border:1px solid var(--border); border-radius:12px; padding:8px;
-    z-index:100; min-width:180px; display:none;
-    box-shadow:0 8px 32px rgba(0,0,0,0.4);
-  }
-  .user-menu.show { display:block; }
-  .user-menu-item {
-    padding:10px 14px; border-radius:8px; font-size:13px; cursor:pointer;
-    color:var(--dim); display:flex; align-items:center; gap:10px;
-    transition:background 0.15s;
-  }
-  .user-menu-item:hover { background:var(--bg3); color:var(--white); }
-  .user-menu-item.danger { color:var(--red); }
-  .user-menu-divider { height:1px; background:var(--border); margin:4px 0; }
-  .user-email { padding:10px 14px; font-size:11px; color:var(--dim); }
+  /* Generator */
+  .gen-controls { margin-bottom:16px; }
+  #gen-btn:disabled { opacity:0.5; cursor:not-allowed; }
+  .gen-status-box { display:flex; align-items:center; gap:10px; padding:16px; color:var(--dim); font-size:13px; }
+  .gen-spinner { width:18px; height:18px; border:2px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; flex-shrink:0; }
+  .gen-error { color:var(--red); font-size:13px; padding:12px 16px; background:rgba(224,112,112,0.08); border:1px solid rgba(224,112,112,0.2); border-radius:10px; margin-bottom:12px; }
+
+  .option-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; cursor:pointer; transition:border-color 0.2s; }
+  .option-card:active { border-color:var(--gold); }
+  .option-num { font-size:11px; color:var(--gold); letter-spacing:2px; margin-bottom:6px; }
+  .option-quote { font-family:'Noto Serif TC',serif; font-size:16px; color:var(--gold); margin-bottom:8px; }
+  .option-preview { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.7; }
+  .option-pick-btn { margin-top:12px; width:100%; background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:10px; border-radius:8px; font-size:13px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; }
+
+  .gen-result { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:18px; margin-top:16px; }
+  .gen-result-title { font-size:12px; color:var(--gold); letter-spacing:2px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
+  .gen-block { margin-bottom:16px; }
+  .gen-block-label { font-size:11px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; }
+  .gen-block-text { font-size:13px; color:rgba(255,255,255,0.8); line-height:1.8; white-space:pre-wrap; padding:10px 12px; background:var(--bg3); border-radius:8px; }
+  .gen-slide { margin-bottom:8px; }
+  .gen-slide-num { font-size:10px; color:var(--dim); margin-bottom:3px; }
+  .gen-copy-btn { background:var(--gold2); border:1px solid rgba(200,168,75,0.3); color:var(--gold); padding:3px 10px; border-radius:6px; font-size:10px; cursor:pointer; }
+  .gen-copy-btn.copied { background:rgba(112,192,144,0.2); border-color:rgba(112,192,144,0.4); color:var(--green); }
+  .gen-save-btn { width:100%; background:var(--gold); color:var(--bg); border:none; border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-weight:500; margin-top:8px; font-family:'Noto Sans TC',sans-serif; }
+  .gen-back-btn { width:100%; background:transparent; color:var(--dim); border:1px solid var(--border); border-radius:10px; padding:12px; cursor:pointer; font-size:13px; margin-top:8px; font-family:'Noto Sans TC',sans-serif; }
 
   /* Modal */
   .modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.8); z-index:200; justify-content:center; align-items:flex-end; }
@@ -185,123 +132,63 @@
 </head>
 <body>
 
-<!-- ===== Google 登入畫面 ===== -->
-<div id="auth-screen">
-  <div class="auth-logo" id="auth-brand-name">伴夢伴醒</div>
-  <div class="auth-subtitle">創作者數據庫</div>
-  <div class="auth-divider"></div>
-  <button class="google-btn" onclick="signInWithGoogle()">
-    <svg width="18" height="18" viewBox="0 0 18 18">
-      <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/>
-      <path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/>
-      <path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/>
-      <path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/>
-    </svg>
-    使用 Google 帳號登入
-  </button>
-  <div class="auth-note">登入後，你的資料只有你能看見<br>每位用戶擁有獨立的資料空間</div>
+<div class="top-nav">
+  <div class="nav-brand">伴夢伴醒</div>
+  <button class="nav-tab active" data-page="overview">總覽</button>
+  <button class="nav-tab" data-page="reels">Reels記錄</button>
+  <button class="nav-tab" data-page="platforms">平台總數</button>
+  <button class="nav-tab" data-page="ideas">內容靈感</button>
 </div>
 
-<!-- ===== 設定品牌名稱畫面 ===== -->
-<div id="brand-setup-screen">
-  <div class="setup-title">歡迎 👋</div>
-  <div class="setup-desc">請輸入你的品牌名稱<br>這將顯示在左上角，之後可以隨時修改</div>
-  <input class="setup-input" type="text" id="brand-name-input" placeholder="例：伴夢伴醒" maxlength="12">
-  <button class="setup-btn" onclick="saveBrandName()">開始使用</button>
+<div id="loading">
+  <div class="loading"><div class="spinner"></div><div class="loading-text">連線中</div></div>
 </div>
 
-<!-- ===== 主應用 ===== -->
-<div id="main-app" style="display:none">
+<div id="app" style="display:none">
 
-  <div class="top-nav">
-    <div class="nav-brand" onclick="openBrandEditModal()">
-      <span id="nav-brand-text">伴夢伴醒</span>
-      <span class="nav-brand-edit">✎</span>
+  <!-- 總覽頁 -->
+  <div class="page active" id="page-overview">
+    <div class="section-title">本週概況</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="ov-total-views">0</div><div class="stat-label">Reels總觀看</div></div>
+      <div class="stat"><div class="stat-num" id="ov-avg-views">0</div><div class="stat-label">平均觀看/篇</div></div>
+      <div class="stat"><div class="stat-num" id="ov-entries">0</div><div class="stat-label">已記錄天數</div></div>
+      <div class="stat"><div class="stat-num" id="ov-ideas">0</div><div class="stat-label">內容靈感庫</div></div>
     </div>
-    <button class="nav-tab active" data-page="overview">總覽</button>
-    <button class="nav-tab" data-page="reels">Reels記錄</button>
-    <button class="nav-tab" data-page="platforms">平台總數</button>
-    <button class="nav-tab" data-page="ideas">內容靈感</button>
-    <div class="nav-user" id="nav-user-btn" onclick="toggleUserMenu()">
-      <span id="nav-user-initial">?</span>
-    </div>
-  </div>
 
-  <!-- 用戶選單 -->
-  <div class="user-menu" id="user-menu">
-    <div class="user-email" id="user-email-display"></div>
-    <div class="user-menu-divider"></div>
-    <div class="user-menu-item" onclick="openBrandEditModal(); toggleUserMenu()">✎ 修改品牌名稱</div>
-    <div class="user-menu-divider"></div>
-    <div class="user-menu-item danger" onclick="signOut()">登出</div>
-  </div>
-
-  <div id="loading">
-    <div class="loading"><div class="spinner"></div><div class="loading-text">連線中</div></div>
-  </div>
-
-  <div id="app" style="display:none">
-
-    <!-- 總覽頁 -->
-    <div class="page active" id="page-overview">
-      <div class="section-title">本週概況</div>
-      <div class="stats">
-        <div class="stat"><div class="stat-num" id="ov-total-views">0</div><div class="stat-label">Reels總觀看</div></div>
-        <div class="stat"><div class="stat-num" id="ov-avg-views">0</div><div class="stat-label">平均觀看/篇</div></div>
-        <div class="stat"><div class="stat-num" id="ov-entries">0</div><div class="stat-label">已記錄天數</div></div>
-        <div class="stat"><div class="stat-num" id="ov-ideas">0</div><div class="stat-label">內容靈感庫</div></div>
+    <div class="section-title">趨勢圖</div>
+    <div class="chart-card">
+      <div class="metric-toggle">
+        <button class="metric-btn active" onclick="setMetric('views',this)">觀看次數</button>
+        <button class="metric-btn" onclick="setMetric('reach',this)">觸及帳號</button>
+        <button class="metric-btn" onclick="setMetric('avgTime',this)">平均觀看(秒)</button>
+        <button class="metric-btn" onclick="setMetric('likes',this)">讚數</button>
       </div>
-
-      <div class="section-title">趨勢圖</div>
-      <div class="chart-card">
-        <div class="metric-toggle">
-          <button class="metric-btn active" onclick="setMetric('views',this)">觀看次數</button>
-          <button class="metric-btn" onclick="setMetric('reach',this)">觸及帳號</button>
-          <button class="metric-btn" onclick="setMetric('avgTime',this)">平均觀看(秒)</button>
-          <button class="metric-btn" onclick="setMetric('likes',this)">讚數</button>
-        </div>
-        <canvas id="trendChart"></canvas>
-      </div>
-
-      <div class="section-title">最新記錄</div>
-      <div id="ov-recent"></div>
+      <canvas id="trendChart"></canvas>
     </div>
 
-    <!-- Reels記錄頁 -->
-    <div class="page" id="page-reels">
-      <button class="add-btn" onclick="openReelModal()">+ 新增今日 Reels 記錄</button>
-      <div id="reels-list"></div>
-    </div>
-
-    <!-- 平台總數頁 -->
-    <div class="page" id="page-platforms">
-      <div class="section-title">各平台目前數字</div>
-      <div id="platforms-list"></div>
-    </div>
-
-    <!-- 內容靈感頁 -->
-    <div class="page" id="page-ideas">
-      <button class="add-btn" onclick="openIdeaModal()">+ 新增內容靈感</button>
-      <div id="ideas-list"></div>
-    </div>
-
+    <div class="section-title">最新記錄</div>
+    <div id="ov-recent"></div>
   </div>
-</div>
 
-<!-- 品牌名稱 Modal -->
-<div class="modal-overlay" id="brand-modal">
-  <div class="modal">
-    <div class="drag-handle"></div>
-    <h3>修改品牌名稱</h3>
-    <div class="form-group">
-      <label>品牌名稱（最多 12 字）</label>
-      <input type="text" id="brand-modal-input" maxlength="12" placeholder="例：伴夢伴醒">
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeBrandEditModal()">取消</button>
-      <button class="btn-primary" onclick="updateBrandName()">儲存</button>
-    </div>
+  <!-- Reels記錄頁 -->
+  <div class="page" id="page-reels">
+    <button class="add-btn" onclick="openReelModal()">+ 新增今日 Reels 記錄</button>
+    <div id="reels-list"></div>
   </div>
+
+  <!-- 平台總數頁 -->
+  <div class="page" id="page-platforms">
+    <div class="section-title">各平台目前數字</div>
+    <div id="platforms-list"></div>
+  </div>
+
+  <!-- 內容靈感頁 -->
+  <div class="page" id="page-ideas">
+    <button class="add-btn" onclick="openIdeaModal()">+ 新增內容靈感</button>
+    <div id="ideas-list"></div>
+  </div>
+
 </div>
 
 <!-- Reel Modal -->
@@ -372,6 +259,7 @@
 </div>
 
 <script>
+// 立即綁定分頁切換，不依賴 module script 載入完成
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.nav-tab').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -383,26 +271,11 @@ document.addEventListener('DOMContentLoaded', function() {
       if (page === 'overview' && window.renderChart) window.renderChart();
     });
   });
-
-  // 點外面關閉用戶選單
-  document.addEventListener('click', function(e) {
-    const menu = document.getElementById('user-menu');
-    const btn = document.getElementById('nav-user-btn');
-    if (menu.classList.contains('show') && !menu.contains(e.target) && !btn.contains(e.target)) {
-      menu.classList.remove('show');
-    }
-  });
 });
-
-window.toggleUserMenu = function() {
-  document.getElementById('user-menu').classList.toggle('show');
-}
 </script>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDvokbEafyLb7s5KihFJ1PSvy4assuzeb0",
@@ -415,143 +288,21 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+const reelsRef = collection(db, 'growth_reels');
+const ideasRef = collection(db, 'growth_ideas');
+const platformsRef = doc(db, 'growth_platforms', 'main');
 
-let currentUser = null;
-let reels = [], ideas = [];
-let platforms = { youtube: 0, ig_followers: 0, threads: 0, line: 0 };
-let editReelId = null, editIdeaId = null, editPlatformKey = null;
-let currentMetric = 'views', chartInstance = null;
+let reels = [];
+let ideas = [];
+let platforms = {
+  youtube: 0, ig_followers: 0, threads: 0, line: 0
+};
+let editReelId = null;
+let editIdeaId = null;
+let editPlatformKey = null;
+let currentMetric = 'views';
+let chartInstance = null;
 let loadedCount = 0;
-let unsubscribeFns = [];
-
-// ===== Auth =====
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('brand-setup-screen').style.display = 'none';
-
-    // 更新用戶頭像 / 姓名首字
-    const initial = (user.displayName || user.email || '?')[0].toUpperCase();
-    const navUser = document.getElementById('nav-user-btn');
-    if (user.photoURL) {
-      navUser.innerHTML = `<img src="${user.photoURL}" alt="">`;
-    } else {
-      document.getElementById('nav-user-initial').textContent = initial;
-    }
-    document.getElementById('user-email-display').textContent = user.email || '';
-
-    // 讀取或建立用戶設定（品牌名稱）
-    const settingsRef = doc(db, 'users', user.uid, 'settings', 'main');
-    const settingsSnap = await getDoc(settingsRef);
-
-    if (!settingsSnap.exists() || !settingsSnap.data().brandName) {
-      // 第一次登入，顯示品牌設定畫面
-      document.getElementById('brand-setup-screen').style.display = 'flex';
-      window._settingsRef = settingsRef;
-    } else {
-      const brandName = settingsSnap.data().brandName;
-      setBrandNameDisplay(brandName);
-      window._settingsRef = settingsRef;
-      startApp(user.uid);
-    }
-  } else {
-    currentUser = null;
-    unsubscribeFns.forEach(fn => fn());
-    unsubscribeFns = [];
-    document.getElementById('auth-screen').style.display = 'flex';
-    document.getElementById('brand-setup-screen').style.display = 'none';
-    document.getElementById('main-app').style.display = 'none';
-  }
-});
-
-function setBrandNameDisplay(name) {
-  document.getElementById('nav-brand-text').textContent = name;
-  document.title = name + ' · 獲客行事曆';
-  document.getElementById('auth-brand-name').textContent = name;
-}
-
-window.signInWithGoogle = async function() {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (e) {
-    alert('登入失敗：' + e.message);
-  }
-}
-
-window.signOut = async function() {
-  if (!confirm('確定要登出嗎？')) return;
-  await fbSignOut(auth);
-  document.getElementById('user-menu').classList.remove('show');
-}
-
-// ===== 品牌名稱設定 =====
-window.saveBrandName = async function() {
-  const name = document.getElementById('brand-name-input').value.trim();
-  if (!name) { alert('請輸入品牌名稱'); return; }
-  try {
-    await setDoc(window._settingsRef, { brandName: name }, { merge: true });
-    setBrandNameDisplay(name);
-    document.getElementById('brand-setup-screen').style.display = 'none';
-    startApp(currentUser.uid);
-  } catch(e) { alert('儲存失敗：' + e.message); }
-}
-
-window.openBrandEditModal = function() {
-  document.getElementById('brand-modal-input').value = document.getElementById('nav-brand-text').textContent;
-  document.getElementById('brand-modal').classList.add('show');
-}
-
-window.closeBrandEditModal = function() {
-  document.getElementById('brand-modal').classList.remove('show');
-}
-
-window.updateBrandName = async function() {
-  const name = document.getElementById('brand-modal-input').value.trim();
-  if (!name) { alert('請輸入品牌名稱'); return; }
-  try {
-    await setDoc(window._settingsRef, { brandName: name }, { merge: true });
-    setBrandNameDisplay(name);
-    closeBrandEditModal();
-  } catch(e) { alert('儲存失敗：' + e.message); }
-}
-
-// ===== 啟動資料監聽（per-user 資料路徑）=====
-function startApp(uid) {
-  document.getElementById('main-app').style.display = 'block';
-  loadedCount = 0;
-
-  const reelsRef = collection(db, 'users', uid, 'growth_reels');
-  const ideasRef = collection(db, 'users', uid, 'growth_ideas');
-  const platformsRef = doc(db, 'users', uid, 'growth_platforms', 'main');
-
-  window._reelsRef = reelsRef;
-  window._ideasRef = ideasRef;
-  window._platformsRef = platformsRef;
-  window._uid = uid;
-
-  const u1 = onSnapshot(query(reelsRef, orderBy('date', 'asc')), snap => {
-    reels = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderAll();
-    checkAllLoaded();
-  });
-
-  const u2 = onSnapshot(query(ideasRef, orderBy('createdAt', 'desc')), snap => {
-    ideas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderIdeas();
-    checkAllLoaded();
-  });
-
-  const u3 = onSnapshot(platformsRef, snap => {
-    if (snap.exists()) platforms = { ...platforms, ...snap.data() };
-    renderPlatforms();
-    checkAllLoaded();
-  });
-
-  unsubscribeFns = [u1, u2, u3];
-}
 
 function checkAllLoaded() {
   loadedCount++;
@@ -561,9 +312,35 @@ function checkAllLoaded() {
   }
 }
 
-// ===== Overview =====
-function renderAll() { renderOverview(); renderReelsList(); }
+// Listen to reels
+onSnapshot(query(reelsRef, orderBy('date', 'asc')), snap => {
+  reels = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderAll();
+  checkAllLoaded();
+});
 
+// Listen to ideas
+onSnapshot(query(ideasRef, orderBy('createdAt', 'desc')), snap => {
+  ideas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderIdeas();
+  checkAllLoaded();
+});
+
+// Listen to platforms
+onSnapshot(platformsRef, snap => {
+  if (snap.exists()) {
+    platforms = { ...platforms, ...snap.data() };
+  }
+  renderPlatforms();
+  checkAllLoaded();
+});
+
+function renderAll() {
+  renderOverview();
+  renderReelsList();
+}
+
+// ===== Overview =====
 function renderOverview() {
   const totalViews = reels.reduce((s, r) => s + (Number(r.views) || 0), 0);
   const avgViews = reels.length ? Math.round(totalViews / reels.length) : 0;
@@ -579,14 +356,16 @@ function renderOverview() {
   } else {
     recentEl.innerHTML = recent.map(r => reelCardHtml(r, true)).join('');
   }
+
   renderChart();
 }
 
 function renderChart() {
   const ctx = document.getElementById('trendChart');
-  if (!ctx) return;
   const labels = reels.map(r => r.day || r.date);
-  const metricMap = { views: 'views', reach: 'reach', avgTime: 'avgtime', likes: 'likes' };
+  const metricMap = {
+    views: 'views', reach: 'reach', avgTime: 'avgtime', likes: 'likes'
+  };
   const field = metricMap[currentMetric];
   const data = reels.map(r => Number(r[field]) || 0);
 
@@ -596,9 +375,14 @@ function renderChart() {
     data: {
       labels,
       datasets: [{
-        label: currentMetric, data,
-        borderColor: '#c8a84b', backgroundColor: 'rgba(200,168,75,0.1)',
-        fill: true, tension: 0.3, pointBackgroundColor: '#c8a84b', pointRadius: 4,
+        label: currentMetric,
+        data,
+        borderColor: '#c8a84b',
+        backgroundColor: 'rgba(200,168,75,0.1)',
+        fill: true,
+        tension: 0.3,
+        pointBackgroundColor: '#c8a84b',
+        pointRadius: 4,
       }]
     },
     options: {
@@ -639,13 +423,16 @@ function reelCardHtml(r, compact = false) {
       <div class="metric-box"><div class="metric-val">${r.avgtime||0}s</div><div class="metric-lbl">平均觀看</div></div>
       <div class="metric-box"><div class="metric-val">${r.likes||0}</div><div class="metric-lbl">讚</div></div>
     </div>
-    ${r.note ? `<div style="margin-top:8px;font-size:12px;color:var(--dim);font-style:italic;padding:6px 10px;background:var(--bg3);border-radius:6px;">${r.note}</div>` : ''}
+    ${r.note ? `<div class="card-note" style="margin-top:8px;font-size:12px;color:var(--dim);font-style:italic;padding:6px 10px;background:var(--bg3);border-radius:6px;">${r.note}</div>` : ''}
   </div>`;
 }
 
 function renderReelsList() {
   const el = document.getElementById('reels-list');
-  if (!reels.length) { el.innerHTML = '<div class="empty">還沒有記錄，點上方按鈕新增</div>'; return; }
+  if (!reels.length) {
+    el.innerHTML = '<div class="empty">還沒有記錄，點上方按鈕新增</div>';
+    return;
+  }
   el.innerHTML = [...reels].reverse().map(r => reelCardHtml(r, false)).join('');
 }
 
@@ -654,7 +441,15 @@ window.openReelModal = function() {
   document.getElementById('reel-modal-title').textContent = '新增 Reels 記錄';
   document.getElementById('r-day').value = `Day${reels.length + 1}`;
   document.getElementById('r-date').value = new Date().toISOString().slice(0,10);
-  ['r-theme','r-views','r-reach','r-avgtime','r-likes','r-comments','r-saves','r-newfollowers','r-note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('r-theme').value = '';
+  document.getElementById('r-views').value = '';
+  document.getElementById('r-reach').value = '';
+  document.getElementById('r-avgtime').value = '';
+  document.getElementById('r-likes').value = '';
+  document.getElementById('r-comments').value = '';
+  document.getElementById('r-saves').value = '';
+  document.getElementById('r-newfollowers').value = '';
+  document.getElementById('r-note').value = '';
   document.getElementById('reel-modal').classList.add('show');
 }
 
@@ -677,7 +472,9 @@ window.openEditReel = function(id) {
   document.getElementById('reel-modal').classList.add('show');
 }
 
-window.closeReelModal = function() { document.getElementById('reel-modal').classList.remove('show'); }
+window.closeReelModal = function() {
+  document.getElementById('reel-modal').classList.remove('show');
+}
 
 window.saveReel = async function() {
   const data = {
@@ -695,9 +492,9 @@ window.saveReel = async function() {
   };
   try {
     if (editReelId) {
-      await updateDoc(doc(db, 'users', window._uid, 'growth_reels', editReelId), data);
+      await updateDoc(doc(db, 'growth_reels', editReelId), data);
     } else {
-      await addDoc(window._reelsRef, { ...data, createdAt: serverTimestamp() });
+      await addDoc(reelsRef, { ...data, createdAt: serverTimestamp() });
     }
     window.closeReelModal();
   } catch(e) { alert('儲存失敗: ' + e.message); }
@@ -705,7 +502,7 @@ window.saveReel = async function() {
 
 window.deleteReel = async function(id) {
   if (!confirm('確定要刪除這筆記錄嗎？')) return;
-  await deleteDoc(doc(db, 'users', window._uid, 'growth_reels', id));
+  await deleteDoc(doc(db, 'growth_reels', id));
 }
 
 // ===== Platforms =====
@@ -738,12 +535,15 @@ window.openPlatformModal = function(key, name) {
   document.getElementById('platform-modal').classList.add('show');
 }
 
-window.closePlatformModal = function() { document.getElementById('platform-modal').classList.remove('show'); }
+window.closePlatformModal = function() {
+  document.getElementById('platform-modal').classList.remove('show');
+}
 
 window.savePlatform = async function() {
   const val = Number(document.getElementById('p-value').value) || 0;
+  const updateData = { [editPlatformKey]: val };
   try {
-    await setDoc(window._platformsRef, { [editPlatformKey]: val }, { merge: true });
+    await setDoc(platformsRef, updateData, { merge: true });
     window.closePlatformModal();
   } catch(e) { alert('儲存失敗: ' + e.message); }
 }
@@ -751,7 +551,10 @@ window.savePlatform = async function() {
 // ===== Ideas =====
 function renderIdeas() {
   const el = document.getElementById('ideas-list');
-  if (!ideas.length) { el.innerHTML = '<div class="empty">還沒有靈感，點上方按鈕新增</div>'; return; }
+  if (!ideas.length) {
+    el.innerHTML = '<div class="empty">還沒有靈感，點上方按鈕新增</div>';
+    return;
+  }
   el.innerHTML = ideas.map(i => `
     <div class="idea-card">
       <div class="idea-top">
@@ -765,8 +568,7 @@ function renderIdeas() {
       </div>
     </div>
   `).join('');
-  const ovEl = document.getElementById('ov-ideas');
-  if (ovEl) ovEl.textContent = ideas.length;
+  document.getElementById('ov-ideas') && (document.getElementById('ov-ideas').textContent = ideas.length);
 }
 
 window.openIdeaModal = function() {
@@ -789,17 +591,23 @@ window.openEditIdea = function(id) {
   document.getElementById('idea-modal').classList.add('show');
 }
 
-window.closeIdeaModal = function() { document.getElementById('idea-modal').classList.remove('show'); }
+window.closeIdeaModal = function() {
+  document.getElementById('idea-modal').classList.remove('show');
+}
 
 window.saveIdea = async function() {
   const title = document.getElementById('i-title').value.trim();
   if (!title) { alert('請輸入標題'); return; }
-  const data = { title, tag: document.getElementById('i-tag').value, desc: document.getElementById('i-desc').value.trim() };
+  const data = {
+    title,
+    tag: document.getElementById('i-tag').value,
+    desc: document.getElementById('i-desc').value.trim(),
+  };
   try {
     if (editIdeaId) {
-      await updateDoc(doc(db, 'users', window._uid, 'growth_ideas', editIdeaId), data);
+      await updateDoc(doc(db, 'growth_ideas', editIdeaId), data);
     } else {
-      await addDoc(window._ideasRef, { ...data, createdAt: serverTimestamp() });
+      await addDoc(ideasRef, { ...data, createdAt: serverTimestamp() });
     }
     window.closeIdeaModal();
   } catch(e) { alert('儲存失敗: ' + e.message); }
@@ -807,13 +615,13 @@ window.saveIdea = async function() {
 
 window.deleteIdea = async function(id) {
   if (!confirm('確定要刪除這個靈感嗎？')) return;
-  await deleteDoc(doc(db, 'users', window._uid, 'growth_ideas', id));
+  await deleteDoc(doc(db, 'growth_ideas', id));
 }
 
 window.renderChart = renderChart;
 
-// Modal 點外面關閉
-['reel-modal','platform-modal','idea-modal','brand-modal'].forEach(id => {
+// Modal click outside to close
+['reel-modal','platform-modal','idea-modal'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('show');
   });
