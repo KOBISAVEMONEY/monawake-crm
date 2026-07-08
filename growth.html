@@ -37,24 +37,20 @@
 
   .add-btn { background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-family:'Noto Sans TC',sans-serif; letter-spacing:1px; width:100%; margin-bottom:16px; }
 
-  /* Stats overview */
   .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px; }
   .stat { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; }
   .stat-num { font-size:22px; font-weight:500; color:var(--gold); font-family:'Noto Serif TC',serif; }
   .stat-label { font-size:11px; color:var(--dim); margin-top:3px; letter-spacing:1px; }
 
-  /* Chart */
   .chart-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; }
   .chart-title { font-size:12px; color:var(--dim); letter-spacing:1px; margin-bottom:12px; }
   canvas { max-height:220px; }
 
-  /* Toggle buttons for chart metric */
   .metric-toggle { display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; }
   .metric-toggle::-webkit-scrollbar { display:none; }
   .metric-btn { padding:5px 12px; border-radius:16px; font-size:11px; cursor:pointer; border:1px solid var(--border); color:var(--dim); background:transparent; white-space:nowrap; flex-shrink:0; }
   .metric-btn.active { background:var(--gold2); border-color:var(--gold); color:var(--gold); }
 
-  /* Entry cards (Reels log) */
   .entry-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
   .entry-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:8px; }
   .entry-day { font-size:14px; color:var(--gold); font-weight:500; }
@@ -68,7 +64,6 @@
   .metric-val { font-size:15px; color:var(--gold); font-weight:500; }
   .metric-lbl { font-size:9px; color:var(--dim); margin-top:2px; }
 
-  /* Idea cards */
   .idea-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
   .idea-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px; }
   .idea-title { font-size:14px; color:var(--white); font-weight:500; flex:1; }
@@ -76,7 +71,6 @@
   .idea-desc { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.7; white-space:pre-wrap; }
   .idea-actions { display:flex; gap:6px; margin-top:10px; }
 
-  /* Platform totals */
   .platform-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; }
   .platform-icon { width:40px; height:40px; border-radius:10px; background:var(--gold2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
   .platform-info { flex:1; }
@@ -86,32 +80,6 @@
   .platform-edit { background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--dim); padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer; margin-left:8px; }
 
   .empty { text-align:center; color:var(--dim); font-size:13px; padding:30px; letter-spacing:1px; }
-
-  /* Generator */
-  .gen-controls { margin-bottom:16px; }
-  #gen-btn:disabled { opacity:0.5; cursor:not-allowed; }
-  .gen-status-box { display:flex; align-items:center; gap:10px; padding:16px; color:var(--dim); font-size:13px; }
-  .gen-spinner { width:18px; height:18px; border:2px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; flex-shrink:0; }
-  .gen-error { color:var(--red); font-size:13px; padding:12px 16px; background:rgba(224,112,112,0.08); border:1px solid rgba(224,112,112,0.2); border-radius:10px; margin-bottom:12px; }
-
-  .option-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; cursor:pointer; transition:border-color 0.2s; }
-  .option-card:active { border-color:var(--gold); }
-  .option-num { font-size:11px; color:var(--gold); letter-spacing:2px; margin-bottom:6px; }
-  .option-quote { font-family:'Noto Serif TC',serif; font-size:16px; color:var(--gold); margin-bottom:8px; }
-  .option-preview { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.7; }
-  .option-pick-btn { margin-top:12px; width:100%; background:var(--gold2); border:1px solid var(--gold); color:var(--gold); padding:10px; border-radius:8px; font-size:13px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; }
-
-  .gen-result { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:18px; margin-top:16px; }
-  .gen-result-title { font-size:12px; color:var(--gold); letter-spacing:2px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
-  .gen-block { margin-bottom:16px; }
-  .gen-block-label { font-size:11px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; }
-  .gen-block-text { font-size:13px; color:rgba(255,255,255,0.8); line-height:1.8; white-space:pre-wrap; padding:10px 12px; background:var(--bg3); border-radius:8px; }
-  .gen-slide { margin-bottom:8px; }
-  .gen-slide-num { font-size:10px; color:var(--dim); margin-bottom:3px; }
-  .gen-copy-btn { background:var(--gold2); border:1px solid rgba(200,168,75,0.3); color:var(--gold); padding:3px 10px; border-radius:6px; font-size:10px; cursor:pointer; }
-  .gen-copy-btn.copied { background:rgba(112,192,144,0.2); border-color:rgba(112,192,144,0.4); color:var(--green); }
-  .gen-save-btn { width:100%; background:var(--gold); color:var(--bg); border:none; border-radius:10px; padding:14px; cursor:pointer; font-size:14px; font-weight:500; margin-top:8px; font-family:'Noto Sans TC',sans-serif; }
-  .gen-back-btn { width:100%; background:transparent; color:var(--dim); border:1px solid var(--border); border-radius:10px; padding:12px; cursor:pointer; font-size:13px; margin-top:8px; font-family:'Noto Sans TC',sans-serif; }
 
   /* Modal */
   .modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.8); z-index:200; justify-content:center; align-items:flex-end; }
@@ -156,6 +124,12 @@
       <div class="stat"><div class="stat-num" id="ov-ideas">0</div><div class="stat-label">內容靈感庫</div></div>
     </div>
 
+    <div class="section-title">粉絲成長曲線</div>
+    <div class="chart-card">
+      <div class="chart-title">累積粉絲數（從 Reels 記錄新增粉絲加總）</div>
+      <canvas id="followerChart"></canvas>
+    </div>
+
     <div class="section-title">趨勢圖</div>
     <div class="chart-card">
       <div class="metric-toggle">
@@ -163,6 +137,7 @@
         <button class="metric-btn" onclick="setMetric('reach',this)">觸及帳號</button>
         <button class="metric-btn" onclick="setMetric('avgTime',this)">平均觀看(秒)</button>
         <button class="metric-btn" onclick="setMetric('likes',this)">讚數</button>
+        <button class="metric-btn" onclick="setMetric('shares',this)">分享數</button>
       </div>
       <canvas id="trendChart"></canvas>
     </div>
@@ -262,7 +237,6 @@
 </div>
 
 <script>
-// 立即綁定分頁切換，不依賴 module script 載入完成
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.nav-tab').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -271,14 +245,14 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
       document.getElementById('page-' + page).classList.add('active');
       this.classList.add('active');
-      if (page === 'overview' && window.renderChart) window.renderChart();
+      if (page === 'overview' && window.renderCharts) window.renderCharts();
     });
   });
 });
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDvokbEafyLb7s5KihFJ1PSvy4assuzeb0",
@@ -295,16 +269,11 @@ const reelsRef = collection(db, 'growth_reels');
 const ideasRef = collection(db, 'growth_ideas');
 const platformsRef = doc(db, 'growth_platforms', 'main');
 
-let reels = [];
-let ideas = [];
-let platforms = {
-  youtube: 0, ig_followers: 0, threads: 0, line: 0
-};
-let editReelId = null;
-let editIdeaId = null;
-let editPlatformKey = null;
+let reels = [], ideas = [];
+let platforms = { youtube: 0, ig_followers: 0, threads: 0, line: 0 };
+let editReelId = null, editIdeaId = null, editPlatformKey = null;
 let currentMetric = 'views';
-let chartInstance = null;
+let trendChartInstance = null, followerChartInstance = null;
 let loadedCount = 0;
 
 function checkAllLoaded() {
@@ -315,35 +284,26 @@ function checkAllLoaded() {
   }
 }
 
-// Listen to reels
 onSnapshot(query(reelsRef, orderBy('date', 'asc')), snap => {
   reels = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderAll();
   checkAllLoaded();
 });
 
-// Listen to ideas
 onSnapshot(query(ideasRef, orderBy('createdAt', 'desc')), snap => {
   ideas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderIdeas();
   checkAllLoaded();
 });
 
-// Listen to platforms
 onSnapshot(platformsRef, snap => {
-  if (snap.exists()) {
-    platforms = { ...platforms, ...snap.data() };
-  }
+  if (snap.exists()) platforms = { ...platforms, ...snap.data() };
   renderPlatforms();
   checkAllLoaded();
 });
 
-function renderAll() {
-  renderOverview();
-  renderReelsList();
-}
+function renderAll() { renderOverview(); renderReelsList(); }
 
-// ===== Overview =====
 function renderOverview() {
   const totalViews = reels.reduce((s, r) => s + (Number(r.views) || 0), 0);
   const avgViews = reels.length ? Math.round(totalViews / reels.length) : 0;
@@ -354,26 +314,75 @@ function renderOverview() {
 
   const recentEl = document.getElementById('ov-recent');
   const recent = [...reels].slice(-3).reverse();
-  if (!recent.length) {
-    recentEl.innerHTML = '<div class="empty">還沒有記錄，去「Reels記錄」新增第一筆吧</div>';
-  } else {
-    recentEl.innerHTML = recent.map(r => reelCardHtml(r, true)).join('');
-  }
+  recentEl.innerHTML = recent.length
+    ? recent.map(r => reelCardHtml(r, true)).join('')
+    : '<div class="empty">還沒有記錄，去「Reels記錄」新增第一筆吧</div>';
 
-  renderChart();
+  renderCharts();
 }
 
-function renderChart() {
+function renderCharts() {
+  renderFollowerChart();
+  renderTrendChart();
+}
+
+// ===== 粉絲成長折線圖 =====
+function renderFollowerChart() {
+  const ctx = document.getElementById('followerChart');
+  const labels = reels.map(r => r.day || r.date);
+
+  // 累積新增粉絲
+  let cumulative = 0;
+  const data = reels.map(r => {
+    cumulative += Number(r.newfollowers) || 0;
+    return cumulative;
+  });
+
+  if (followerChartInstance) followerChartInstance.destroy();
+  followerChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: '累積粉絲',
+        data,
+        borderColor: '#c8a84b',
+        backgroundColor: 'rgba(200,168,75,0.12)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#c8a84b',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `累積粉絲：${ctx.parsed.y} 人`
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+// ===== 趨勢圖 =====
+function renderTrendChart() {
   const ctx = document.getElementById('trendChart');
   const labels = reels.map(r => r.day || r.date);
-  const metricMap = {
-    views: 'views', reach: 'reach', avgTime: 'avgtime', likes: 'likes'
-  };
+  const metricMap = { views: 'views', reach: 'reach', avgTime: 'avgtime', likes: 'likes', shares: 'shares' };
   const field = metricMap[currentMetric];
   const data = reels.map(r => Number(r[field]) || 0);
 
-  if (chartInstance) chartInstance.destroy();
-  chartInstance = new Chart(ctx, {
+  if (trendChartInstance) trendChartInstance.destroy();
+  trendChartInstance = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
@@ -403,8 +412,10 @@ window.setMetric = function(metric, btn) {
   currentMetric = metric;
   document.querySelectorAll('.metric-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderChart();
+  renderTrendChart();
 }
+
+window.renderCharts = renderCharts;
 
 // ===== Reels =====
 function reelCardHtml(r, compact = false) {
@@ -428,17 +439,15 @@ function reelCardHtml(r, compact = false) {
       <div class="metric-box"><div class="metric-val">${r.views||0}</div><div class="metric-lbl">觀看</div></div>
       <div class="metric-box"><div class="metric-val">${r.reach||0}</div><div class="metric-lbl">觸及</div></div>
       <div class="metric-box"><div class="metric-val">${r.avgtime||0}s</div><div class="metric-lbl">平均觀看</div></div>
+      <div class="metric-box"><div class="metric-val">+${r.newfollowers||0}</div><div class="metric-lbl">新增粉絲</div></div>
     </div>
-    ${r.note ? `<div class="card-note" style="margin-top:8px;font-size:12px;color:var(--dim);font-style:italic;padding:6px 10px;background:var(--bg3);border-radius:6px;">${r.note}</div>` : ''}
+    ${r.note ? `<div style="margin-top:8px;font-size:12px;color:var(--dim);font-style:italic;padding:6px 10px;background:var(--bg3);border-radius:6px;">${r.note}</div>` : ''}
   </div>`;
 }
 
 function renderReelsList() {
   const el = document.getElementById('reels-list');
-  if (!reels.length) {
-    el.innerHTML = '<div class="empty">還沒有記錄，點上方按鈕新增</div>';
-    return;
-  }
+  if (!reels.length) { el.innerHTML = '<div class="empty">還沒有記錄，點上方按鈕新增</div>'; return; }
   el.innerHTML = [...reels].reverse().map(r => reelCardHtml(r, false)).join('');
 }
 
@@ -447,16 +456,7 @@ window.openReelModal = function() {
   document.getElementById('reel-modal-title').textContent = '新增 Reels 記錄';
   document.getElementById('r-day').value = `Day${reels.length + 1}`;
   document.getElementById('r-date').value = new Date().toISOString().slice(0,10);
-  document.getElementById('r-theme').value = '';
-  document.getElementById('r-views').value = '';
-  document.getElementById('r-reach').value = '';
-  document.getElementById('r-avgtime').value = '';
-  document.getElementById('r-likes').value = '';
-  document.getElementById('r-comments').value = '';
-  document.getElementById('r-shares').value = '';
-  document.getElementById('r-saves').value = '';
-  document.getElementById('r-newfollowers').value = '';
-  document.getElementById('r-note').value = '';
+  ['r-theme','r-likes','r-comments','r-shares','r-saves','r-views','r-reach','r-avgtime','r-newfollowers','r-note'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('reel-modal').classList.add('show');
 }
 
@@ -468,34 +468,32 @@ window.openEditReel = function(id) {
   document.getElementById('r-day').value = r.day || '';
   document.getElementById('r-date').value = r.date || '';
   document.getElementById('r-theme').value = r.theme || '';
-  document.getElementById('r-views').value = r.views || '';
-  document.getElementById('r-reach').value = r.reach || '';
-  document.getElementById('r-avgtime').value = r.avgtime || '';
   document.getElementById('r-likes').value = r.likes || '';
   document.getElementById('r-comments').value = r.comments || '';
   document.getElementById('r-shares').value = r.shares || '';
   document.getElementById('r-saves').value = r.saves || '';
+  document.getElementById('r-views').value = r.views || '';
+  document.getElementById('r-reach').value = r.reach || '';
+  document.getElementById('r-avgtime').value = r.avgtime || '';
   document.getElementById('r-newfollowers').value = r.newfollowers || '';
   document.getElementById('r-note').value = r.note || '';
   document.getElementById('reel-modal').classList.add('show');
 }
 
-window.closeReelModal = function() {
-  document.getElementById('reel-modal').classList.remove('show');
-}
+window.closeReelModal = function() { document.getElementById('reel-modal').classList.remove('show'); }
 
 window.saveReel = async function() {
   const data = {
     day: document.getElementById('r-day').value.trim(),
     date: document.getElementById('r-date').value,
     theme: document.getElementById('r-theme').value.trim(),
-    views: Number(document.getElementById('r-views').value) || 0,
-    reach: Number(document.getElementById('r-reach').value) || 0,
-    avgtime: Number(document.getElementById('r-avgtime').value) || 0,
     likes: Number(document.getElementById('r-likes').value) || 0,
     comments: Number(document.getElementById('r-comments').value) || 0,
     shares: Number(document.getElementById('r-shares').value) || 0,
     saves: Number(document.getElementById('r-saves').value) || 0,
+    views: Number(document.getElementById('r-views').value) || 0,
+    reach: Number(document.getElementById('r-reach').value) || 0,
+    avgtime: Number(document.getElementById('r-avgtime').value) || 0,
     newfollowers: Number(document.getElementById('r-newfollowers').value) || 0,
     note: document.getElementById('r-note').value.trim(),
   };
@@ -523,8 +521,7 @@ const platformMeta = [
 ];
 
 function renderPlatforms() {
-  const el = document.getElementById('platforms-list');
-  el.innerHTML = platformMeta.map(p => `
+  document.getElementById('platforms-list').innerHTML = platformMeta.map(p => `
     <div class="platform-card">
       <div class="platform-icon">${p.icon}</div>
       <div class="platform-info">
@@ -544,15 +541,12 @@ window.openPlatformModal = function(key, name) {
   document.getElementById('platform-modal').classList.add('show');
 }
 
-window.closePlatformModal = function() {
-  document.getElementById('platform-modal').classList.remove('show');
-}
+window.closePlatformModal = function() { document.getElementById('platform-modal').classList.remove('show'); }
 
 window.savePlatform = async function() {
   const val = Number(document.getElementById('p-value').value) || 0;
-  const updateData = { [editPlatformKey]: val };
   try {
-    await setDoc(platformsRef, updateData, { merge: true });
+    await setDoc(platformsRef, { [editPlatformKey]: val }, { merge: true });
     window.closePlatformModal();
   } catch(e) { alert('儲存失敗: ' + e.message); }
 }
@@ -560,10 +554,7 @@ window.savePlatform = async function() {
 // ===== Ideas =====
 function renderIdeas() {
   const el = document.getElementById('ideas-list');
-  if (!ideas.length) {
-    el.innerHTML = '<div class="empty">還沒有靈感，點上方按鈕新增</div>';
-    return;
-  }
+  if (!ideas.length) { el.innerHTML = '<div class="empty">還沒有靈感，點上方按鈕新增</div>'; return; }
   el.innerHTML = ideas.map(i => `
     <div class="idea-card">
       <div class="idea-top">
@@ -577,7 +568,8 @@ function renderIdeas() {
       </div>
     </div>
   `).join('');
-  document.getElementById('ov-ideas') && (document.getElementById('ov-ideas').textContent = ideas.length);
+  const ovEl = document.getElementById('ov-ideas');
+  if (ovEl) ovEl.textContent = ideas.length;
 }
 
 window.openIdeaModal = function() {
@@ -600,18 +592,12 @@ window.openEditIdea = function(id) {
   document.getElementById('idea-modal').classList.add('show');
 }
 
-window.closeIdeaModal = function() {
-  document.getElementById('idea-modal').classList.remove('show');
-}
+window.closeIdeaModal = function() { document.getElementById('idea-modal').classList.remove('show'); }
 
 window.saveIdea = async function() {
   const title = document.getElementById('i-title').value.trim();
   if (!title) { alert('請輸入標題'); return; }
-  const data = {
-    title,
-    tag: document.getElementById('i-tag').value,
-    desc: document.getElementById('i-desc').value.trim(),
-  };
+  const data = { title, tag: document.getElementById('i-tag').value, desc: document.getElementById('i-desc').value.trim() };
   try {
     if (editIdeaId) {
       await updateDoc(doc(db, 'growth_ideas', editIdeaId), data);
@@ -627,9 +613,6 @@ window.deleteIdea = async function(id) {
   await deleteDoc(doc(db, 'growth_ideas', id));
 }
 
-window.renderChart = renderChart;
-
-// Modal click outside to close
 ['reel-modal','platform-modal','idea-modal'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('show');
