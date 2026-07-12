@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>伴夢伴醒 · 服務條款</title>
+<title>伴夢伴醒 · 陪伴方案</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&display=swap');
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -14,32 +14,50 @@
   .brand-en { font-size:11px; color:rgba(200,168,75,0.45); letter-spacing:3px; margin-bottom:16px; }
   .page-title { font-size:14px; color:rgba(255,255,255,0.5); letter-spacing:3px; }
 
+  /* 方案卡片 */
+  .plan-intro { font-family:'Noto Serif TC',serif; font-size:15px; color:rgba(255,255,255,0.75); line-height:2.2; letter-spacing:1px; text-align:center; margin-bottom:28px; }
+  .plan-intro span { color:#c8a84b; }
+
+  .plan-cards { display:flex; flex-direction:column; gap:16px; margin-bottom:32px; }
+
+  .plan-card { border-radius:14px; padding:22px 20px; position:relative; overflow:hidden; }
+  .plan-card.single { background:rgba(200,168,75,0.07); border:1px solid rgba(200,168,75,0.25); }
+  .plan-card.deep { background:rgba(200,168,75,0.12); border:1px solid rgba(200,168,75,0.4); }
+
+  .plan-tag { font-size:10px; letter-spacing:3px; color:rgba(200,168,75,0.6); margin-bottom:8px; }
+  .plan-name { font-family:'Noto Serif TC',serif; font-size:20px; color:#c8a84b; margin-bottom:4px; font-weight:400; }
+  .plan-price { font-size:13px; color:rgba(200,168,75,0.7); letter-spacing:2px; margin-bottom:14px; }
+  .plan-quote { font-family:'Noto Serif TC',serif; font-size:14px; color:rgba(255,255,255,0.8); line-height:1.9; letter-spacing:0.5px; margin-bottom:14px; font-style:italic; }
+  .plan-desc { font-size:13px; color:rgba(255,255,255,0.55); line-height:2; letter-spacing:0.5px; }
+
+  .plan-cta { margin-top:24px; }
+  .cta-note { font-size:13px; color:rgba(255,255,255,0.5); line-height:2; text-align:center; margin-bottom:16px; letter-spacing:0.5px; }
+  .cta-btn { display:block; width:100%; padding:16px; background:rgba(200,168,75,0.15); border:1px solid rgba(200,168,75,0.4); border-radius:12px; text-align:center; text-decoration:none; font-family:'Noto Serif TC',serif; font-size:15px; color:#c8a84b; letter-spacing:3px; transition:all 0.2s; }
+  .cta-btn:hover { background:rgba(200,168,75,0.25); }
+  .cta-sub { font-size:11px; color:rgba(200,168,75,0.5); letter-spacing:1px; margin-top:6px; display:block; }
+
+  .time-note { text-align:center; font-size:12px; color:rgba(255,255,255,0.35); letter-spacing:1px; margin-top:14px; line-height:2; }
+
+  .divider { height:1px; background:linear-gradient(to right, transparent, rgba(200,168,75,0.15), transparent); margin:32px 0; }
+  .divider-label { text-align:center; font-size:11px; color:rgba(200,168,75,0.35); letter-spacing:3px; margin:-8px 0 28px; }
+
+  /* 條款部分 */
   .section { margin-bottom:28px; }
-
   .section-num { font-size:11px; color:#c8a84b; letter-spacing:3px; margin-bottom:8px; }
-
   .section-title { font-family:'Noto Serif TC',serif; font-size:16px; color:#c8a84b; margin-bottom:12px; font-weight:400; }
-
   .section-body { font-size:14px; color:rgba(255,255,255,0.7); line-height:2; letter-spacing:0.5px; }
 
-  .divider { height:1px; background:linear-gradient(to right, transparent, rgba(200,168,75,0.15), transparent); margin:28px 0; }
-
   .highlight-box { background:rgba(200,168,75,0.06); border:1px solid rgba(200,168,75,0.15); border-radius:10px; padding:16px 18px; margin:12px 0; }
-
   .highlight-box p { font-size:13px; color:rgba(255,255,255,0.65); line-height:2; }
 
   .warning-box { background:rgba(224,112,112,0.06); border:1px solid rgba(224,112,112,0.15); border-radius:10px; padding:16px 18px; margin:12px 0; }
-
   .warning-box p { font-size:13px; color:rgba(255,255,255,0.65); line-height:2; }
 
   .footer { margin-top:40px; padding-top:20px; border-top:1px solid rgba(200,168,75,0.15); text-align:center; }
-
   .footer-quote { font-family:'Noto Serif TC',serif; font-size:13px; color:rgba(200,168,75,0.4); letter-spacing:3px; line-height:2; margin-bottom:12px; }
-
   .footer-note { font-size:11px; color:rgba(255,255,255,0.2); letter-spacing:2px; }
 
   .agree-box { background:rgba(200,168,75,0.08); border:1px solid rgba(200,168,75,0.25); border-radius:12px; padding:18px 20px; margin-top:28px; text-align:center; }
-
   .agree-box p { font-size:13px; color:rgba(200,168,75,0.8); line-height:2; letter-spacing:1px; }
 
   .stars { position:fixed; top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1; }
@@ -55,13 +73,65 @@
   <div class="star" style="width:1.5px;height:1.5px;top:7%;left:72%;animation-delay:1s;"></div>
   <div class="star" style="width:1px;height:1px;top:18%;left:88%;animation-delay:0.3s;"></div>
   <div class="star" style="width:1.5px;height:1.5px;top:9%;left:92%;animation-delay:0.8s;"></div>
+  <div class="star" style="width:1px;height:1px;top:30%;left:5%;animation-delay:1.3s;"></div>
+  <div class="star" style="width:1.5px;height:1.5px;top:25%;left:95%;animation-delay:0.7s;"></div>
 </div>
 
 <div class="header">
   <div class="brand">伴夢伴醒</div>
   <div class="brand-en">HALF DREAM · HALF AWAKE</div>
-  <div class="page-title">服務條款與免責聲明</div>
+  <div class="page-title">陪伴方案與服務條款</div>
 </div>
+
+<!-- 方案說明 -->
+<div class="plan-intro">
+  這裡有<span>真實的人</span>在陪你<br>
+  不是 AI，不是機器人
+</div>
+
+<div class="plan-cards">
+
+  <div class="plan-card single">
+    <div class="plan-tag">SINGLE SESSION</div>
+    <div class="plan-name">單次傾訴</div>
+    <div class="plan-price">NT$ 199 · 24 小時內</div>
+    <div class="plan-quote">「心裡有件事想說，說完輕一點再走。」</div>
+    <div class="plan-desc">
+      有時候不需要解決什麼，只是想被聽見。<br>
+      這次，就只是說說話。
+    </div>
+  </div>
+
+  <div class="plan-card deep">
+    <div class="plan-tag">DEEP COMPANION</div>
+    <div class="plan-name">深度陪伴</div>
+    <div class="plan-price">NT$ 799 · 連續七天</div>
+    <div class="plan-quote">「生活裡，多了一個懂你的朋友。」</div>
+    <div class="plan-desc">
+      接下來的七天，每天都有一個人在這裡。<br>
+      不用整理好再說，想到什麼就說什麼。
+    </div>
+  </div>
+
+</div>
+
+<div class="plan-cta">
+  <div class="cta-note">
+    想了解哪一種方案<br>
+    直接在 LINE 傳送「單次」或「深度」就好
+  </div>
+  <a class="cta-btn" href="https://lin.ee/wp4snnq" target="_blank">
+    加入 LINE，開始說說話
+    <span class="cta-sub">先加好友，沒有壓力，想說的時候再開口</span>
+  </a>
+  <div class="time-note">
+    真人服務時間 09:00 – 23:00<br>
+    看見了一定認真回，不秒回但不消失
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="divider-label">服務條款與免責聲明</div>
 
 <div class="section">
   <div class="section-num">01</div>
@@ -135,7 +205,7 @@
 </div>
 
 <div class="agree-box">
-  <p>付費完成即代表您已閱讀<br>並完全同意以上條款 🌿</p>
+  <p>付費完成即代表您已閱讀<br>並完全同意以上條款</p>
 </div>
 
 <div class="footer">
